@@ -17,6 +17,7 @@ import com.example.novo.educationtestsample.R;
 import com.example.novo.educationtestsample.adapters.TestAdapter;
 import com.example.novo.educationtestsample.interfaces.ClickListener;
 import com.example.novo.educationtestsample.interfaces.ResponseCallback;
+import com.example.novo.educationtestsample.interfaces.fragmentInteractionListener;
 import com.example.novo.educationtestsample.models.TestItem;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
@@ -26,7 +27,7 @@ import java.util.List;
 
 public class AvailableTests extends Fragment {
 
-    private OnFragmentInteractionListener mListener;
+    fragmentInteractionListener mListener;
     private RecyclerView recyclerView;
     private TestAdapter testAdapter;
     public static List<TestItem> testItemList;
@@ -111,11 +112,11 @@ public class AvailableTests extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof fragmentInteractionListener) {
+            mListener = (fragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement fragmentInteractionListener");
         }
     }
 
@@ -135,8 +136,5 @@ public class AvailableTests extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
+
 }

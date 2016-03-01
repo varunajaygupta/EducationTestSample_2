@@ -1,28 +1,22 @@
 package com.example.novo.educationtestsample.activities;
 
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.novo.educationtestsample.R;
-import com.example.novo.educationtestsample.fragments.AvailableTests;
 import com.example.novo.educationtestsample.fragments.ForumFragment;
 import com.example.novo.educationtestsample.fragments.FragmentDrawer;
-import com.example.novo.educationtestsample.fragments.MissedTests;
-import com.example.novo.educationtestsample.fragments.PendingTests;
 import com.example.novo.educationtestsample.fragments.TestFragment;
+import com.example.novo.educationtestsample.interfaces.fragmentInteractionListener;
 
-public class MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener,TestFragment.OnFragmentInteractionListener,ForumFragment.OnFragmentInteractionListener,AvailableTests.OnFragmentInteractionListener,MissedTests.OnFragmentInteractionListener,PendingTests.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements fragmentInteractionListener,FragmentDrawer.FragmentDrawerListener {
 
     private FragmentDrawer drawerFragment;
     private Toolbar mToolbar;
@@ -100,8 +94,9 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         }
     }
 
+
     @Override
-    public void onFragmentInteraction(Uri uri) {
+    public void callingParentActivity(int fragmentID, String sendingParameter) {
 
     }
 }

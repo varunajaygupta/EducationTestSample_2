@@ -9,11 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.novo.educationtestsample.R;
+import com.example.novo.educationtestsample.interfaces.fragmentInteractionListener;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link PendingTests.OnFragmentInteractionListener} interface
+ * {@link PendingTests.fragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link PendingTests#newInstance} factory method to
  * create an instance of this fragment.
@@ -28,7 +29,7 @@ public class PendingTests extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private OnFragmentInteractionListener mListener;
+    private fragmentInteractionListener mListener;
 
     public PendingTests() {
         // Required empty public constructor
@@ -69,20 +70,16 @@ public class PendingTests extends Fragment {
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
+
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof fragmentInteractionListener) {
+            mListener = (fragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement fragmentInteractionListener");
         }
     }
 
@@ -102,8 +99,5 @@ public class PendingTests extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
+
 }

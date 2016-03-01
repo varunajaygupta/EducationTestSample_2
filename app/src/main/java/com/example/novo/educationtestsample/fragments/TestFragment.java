@@ -12,18 +12,19 @@ import android.view.ViewGroup;
 
 import com.example.novo.educationtestsample.R;
 import com.example.novo.educationtestsample.adapters.ViewPagerAdapter;
+import com.example.novo.educationtestsample.interfaces.fragmentInteractionListener;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link TestFragment.OnFragmentInteractionListener} interface
+ * {@link TestFragment.fragmentInteractionListener} interface
  * to handle interaction events.
  */
 public class TestFragment extends Fragment {
 
 
     private TabLayout tabLayout;
-    private OnFragmentInteractionListener mListener;
+    private fragmentInteractionListener mListener;
     private ViewPager viewPager;
 
 
@@ -63,11 +64,11 @@ public class TestFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof fragmentInteractionListener) {
+            mListener = (fragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement fragmentInteractionListener");
         }
     }
 
@@ -87,8 +88,5 @@ public class TestFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
+
 }
