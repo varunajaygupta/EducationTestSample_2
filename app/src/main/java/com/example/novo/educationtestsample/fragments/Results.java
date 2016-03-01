@@ -1,7 +1,6 @@
 package com.example.novo.educationtestsample.fragments;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -9,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.novo.educationtestsample.R;
-import com.example.novo.educationtestsample.interfaces.fragmentInteractionListener;
+import com.example.novo.educationtestsample.interfaces.FragmentInteractionListener;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,7 +28,7 @@ public class Results extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private fragmentInteractionListener mListener;
+    private FragmentInteractionListener mListener;
 
     public Results() {
         // Required empty public constructor
@@ -74,11 +73,11 @@ public class Results extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof fragmentInteractionListener) {
-            mListener = (fragmentInteractionListener) context;
+        if (context instanceof FragmentInteractionListener) {
+            mListener = (FragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement fragmentInteractionListener");
+                    + " must implement FragmentInteractionListener");
         }
     }
 

@@ -2,7 +2,6 @@ package com.example.novo.educationtestsample.fragments;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,8 +15,8 @@ import com.example.novo.educationtestsample.MyAsyncTask;
 import com.example.novo.educationtestsample.R;
 import com.example.novo.educationtestsample.adapters.TestAdapter;
 import com.example.novo.educationtestsample.interfaces.ClickListener;
+import com.example.novo.educationtestsample.interfaces.FragmentInteractionListener;
 import com.example.novo.educationtestsample.interfaces.ResponseCallback;
-import com.example.novo.educationtestsample.interfaces.fragmentInteractionListener;
 import com.example.novo.educationtestsample.models.TestItem;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
@@ -27,7 +26,7 @@ import java.util.List;
 
 public class AvailableTests extends Fragment {
 
-    fragmentInteractionListener mListener;
+    FragmentInteractionListener mListener;
     private RecyclerView recyclerView;
     private TestAdapter testAdapter;
     public static List<TestItem> testItemList;
@@ -94,7 +93,7 @@ public class AvailableTests extends Fragment {
          testAdapter=new TestAdapter(getActivity(), new ArrayList<TestItem>(), new ClickListener() {
             @Override
             public void onClick(int position) {
-                Toast.makeText(getActivity(),"Test row clicked",Toast.LENGTH_SHORT).show();
+                mListener.replaceFragment(new Question(),"Questions");
             }
 
             @Override
@@ -112,11 +111,11 @@ public class AvailableTests extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof fragmentInteractionListener) {
-            mListener = (fragmentInteractionListener) context;
+        if (context instanceof FragmentInteractionListener) {
+            mListener = (FragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement fragmentInteractionListener");
+                    + " must implement FragmentInteractionListener");
         }
     }
 

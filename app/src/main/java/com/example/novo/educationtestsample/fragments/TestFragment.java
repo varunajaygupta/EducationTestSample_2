@@ -1,7 +1,6 @@
 package com.example.novo.educationtestsample.fragments;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -12,7 +11,7 @@ import android.view.ViewGroup;
 
 import com.example.novo.educationtestsample.R;
 import com.example.novo.educationtestsample.adapters.ViewPagerAdapter;
-import com.example.novo.educationtestsample.interfaces.fragmentInteractionListener;
+import com.example.novo.educationtestsample.interfaces.FragmentInteractionListener;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,7 +23,7 @@ public class TestFragment extends Fragment {
 
 
     private TabLayout tabLayout;
-    private fragmentInteractionListener mListener;
+    private FragmentInteractionListener mListener;
     private ViewPager viewPager;
 
 
@@ -64,11 +63,11 @@ public class TestFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof fragmentInteractionListener) {
-            mListener = (fragmentInteractionListener) context;
+        if (context instanceof FragmentInteractionListener) {
+            mListener = (FragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement fragmentInteractionListener");
+                    + " must implement FragmentInteractionListener");
         }
     }
 

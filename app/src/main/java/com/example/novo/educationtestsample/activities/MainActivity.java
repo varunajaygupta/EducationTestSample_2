@@ -14,9 +14,9 @@ import com.example.novo.educationtestsample.R;
 import com.example.novo.educationtestsample.fragments.ForumFragment;
 import com.example.novo.educationtestsample.fragments.FragmentDrawer;
 import com.example.novo.educationtestsample.fragments.TestFragment;
-import com.example.novo.educationtestsample.interfaces.fragmentInteractionListener;
+import com.example.novo.educationtestsample.interfaces.FragmentInteractionListener;
 
-public class MainActivity extends AppCompatActivity implements fragmentInteractionListener,FragmentDrawer.FragmentDrawerListener {
+public class MainActivity extends AppCompatActivity implements FragmentInteractionListener,FragmentDrawer.FragmentDrawerListener {
 
     private FragmentDrawer drawerFragment;
     private Toolbar mToolbar;
@@ -63,6 +63,9 @@ public class MainActivity extends AppCompatActivity implements fragmentInteracti
     public void onDrawerItemSelected(int position) {
     displayView(position);
     }
+
+
+
     private void displayView(int position) {
         Fragment fragment = null;
         String title = getString(R.string.app_name);
@@ -95,8 +98,19 @@ public class MainActivity extends AppCompatActivity implements fragmentInteracti
     }
 
 
-    @Override
-    public void callingParentActivity(int fragmentID, String sendingParameter) {
 
+
+    @Override
+    public void replaceFragment(Fragment fragmentToReplace, String titleOfFragment) {
+        if (fragmentToReplace != null) {
+            String backStackName=fragmentToReplace.getClass().getName();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.container_body, fragmentToReplace);
+            fragmentTransaction.addToBackStack(backStackName);
+            fragmentTransaction.commit();
+            // set the toolbar title
+            getSupportActionBar().setTitle(titleOfFragment);
+        }
     }
 }
