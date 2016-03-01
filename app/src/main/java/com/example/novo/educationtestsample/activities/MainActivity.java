@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.example.novo.educationtestsample.R;
 import com.example.novo.educationtestsample.fragments.ForumFragment;
@@ -111,6 +112,8 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
             fragmentTransaction.commit();
             // set the toolbar title
             getSupportActionBar().setTitle(titleOfFragment);
+            drawerFragment.setMenuVisibility(false);
+            mToolbar.setVisibility(View.GONE);
         }
     }
 }
