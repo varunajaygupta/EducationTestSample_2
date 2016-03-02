@@ -19,8 +19,8 @@ import com.example.novo.educationtestsample.interfaces.FragmentInteractionListen
 
 public class MainActivity extends AppCompatActivity implements FragmentInteractionListener,FragmentDrawer.FragmentDrawerListener {
 
-    private FragmentDrawer drawerFragment;
-    private Toolbar mToolbar;
+    public FragmentDrawer drawerFragment;
+    public Toolbar mToolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,8 +112,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
             fragmentTransaction.commit();
             // set the toolbar title
             getSupportActionBar().setTitle(titleOfFragment);
-            drawerFragment.setMenuVisibility(false);
-            mToolbar.setVisibility(View.GONE);
+
         }
     }
 }

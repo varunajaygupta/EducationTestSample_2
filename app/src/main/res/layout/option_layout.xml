@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/tools"
+    card_view:cardCornerRadius="@dimen/d6"
+    app:cardUseCompatPadding="true">
+<RelativeLayout
+    android:id="@+id/rlOption"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<TextView
+    android:id="@+id/tvOptionNum"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentTop="true"
+    android:text="A"
+    android:textSize="@dimen/s19"
+    android:padding="@dimen/d5"
+
+    />
+    <ImageView
+    android:id="@+id/ivOption"
+    android:layout_width="@dimen/d100"
+    android:layout_height="@dimen/d100"
+    android:src="@drawable/dummyquestion"
+    android:layout_below="@+id/tvOptionNum"
+    android:layout_centerHorizontal="true"
+        />
+ <RadioButton
+     android:id="@+id/rbOption"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:layout_below="@+id/ivOption"
+     />
+  <TextView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_toRightOf="@+id/rbOption"
+      android:layout_below="@+id/ivOption"
+      android:text="@string/questiondummytext"
+      />
+
+
+</RelativeLayout>
+</android.support.v7.widget.CardView>

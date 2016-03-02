@@ -50,4 +50,13 @@
     <dimen name="nav_drawer_width">260dp</dimen>
     <dimen name="divider">5dp</dimen>
 
+
+   <!-- Font Size-->
+    <dimen name="s14">14sp</dimen>
+    <dimen name="s15">15sp</dimen>
+    <dimen name="s16">16sp</dimen>
+    <dimen name="s17">17sp</dimen>
+    <dimen name="s18">18sp</dimen>
+    <dimen name="s19">19sp</dimen>
+
 </resources>
