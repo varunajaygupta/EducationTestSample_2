@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/iv_test_instruction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_result"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/d35"/>
+
+    <TextView
+        android:id="@+id/tv_test_instruction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/d10"
+        android:textSize="@dimen/d15"
+        android:text="This Test is prepared to check your knowledge.To complete this test you don't need to have mathematical ability.\n\n -Each test have totally 15 questions\n\n -Time Period is: 45mins\n\n -Test start from easy one to hardest one.But most important questions are hard questions and it effects much more than easy questions on your score.\n\n -When you answer a question there are chances to back to your previously answered questions.\n\n  -You shouldn't use any pen/paper/internet search etc. while test.\n\n"/>
+
+    <TextView
+        android:id="@+id/tv_start_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/d18"
+        android:text="START"
+        android:textColor="@color/colorAccent"
+        android:textStyle="bold"
+        android:textSize="20dp" />
+
+</LinearLayout>
