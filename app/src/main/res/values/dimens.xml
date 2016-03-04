@@ -35,8 +35,7 @@
     <!-- Dimension for all Buttons -->
     <dimen name="dimen_horizontal_width">48dp</dimen>
 
-<!--           dimens -->
-
+    <!--           dimens -->
 
 
     <!-- New Home Screen Dimensions-->
@@ -51,12 +50,13 @@
     <dimen name="divider">5dp</dimen>
 
 
-   <!-- Font Size-->
+    <!-- Font Size-->
     <dimen name="s14">14sp</dimen>
     <dimen name="s15">15sp</dimen>
     <dimen name="s16">16sp</dimen>
     <dimen name="s17">17sp</dimen>
     <dimen name="s18">18sp</dimen>
     <dimen name="s19">19sp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 
 </resources>

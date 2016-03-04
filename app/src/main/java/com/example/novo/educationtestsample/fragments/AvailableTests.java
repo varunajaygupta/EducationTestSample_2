@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.novo.educationtestsample.MyAsyncTask;
 import com.example.novo.educationtestsample.R;
@@ -93,7 +92,7 @@ public class AvailableTests extends Fragment {
          testAdapter=new TestAdapter(getActivity(), new ArrayList<TestItem>(), new ClickListener() {
             @Override
             public void onClick(int position) {
-                mListener.replaceFragment(new Question(),"Questions");
+                mListener.replaceFragment(new QuestionFragment(),"Questions");
             }
 
             @Override

@@ -25,7 +25,8 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="dummytext">Dummy Text</string>
+    <string name="dummytext">dummy text</string>
     <string name="questiondummytext">It is easier to roll a stone up a sloping road than to lift it vertical upwards because
     </string>
+    <string name="title_activity_sa">sa</string>
 </resources>

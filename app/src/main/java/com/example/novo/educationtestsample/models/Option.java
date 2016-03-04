@@ -7,6 +7,7 @@ public class Option {
     String optionText;
 
     public Option(String s) {
+        this.optionText=s;
     }
 
     public String getOptionText() {
