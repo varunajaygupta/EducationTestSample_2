@@ -6,10 +6,17 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.ViewFlipper;
 
 import com.example.novo.educationtestsample.R;
 import com.example.novo.educationtestsample.activities.MainActivity;
@@ -29,12 +36,19 @@ public class QuestionFragment extends Fragment {
     FragmentInteractionListener mListener;
     private RecyclerView optionRecyclerView;
     private RecyclerView questionRecyclerView;
+    private  TextView tv;
+    ViewFlipper flipper;
     ImageView questionImage;
     OptionListAdapter optionListAdapter;
     QuestionListAdapter questionListAdapter;
     List<Option> optionList;
     List<Question> questionList;
     LinearLayoutManager questionListLinearLayoutManager;
+    private ClickListener clickListener;
+    Animation animFlipInForeward;
+    Animation animFlipOutForeward;
+    Animation animFlipInBackward;
+    Animation animFlipOutBackward;
     public QuestionFragment() {
         // Required empty public constructor
     }
@@ -122,6 +136,55 @@ public class QuestionFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root= inflater.inflate(R.layout.fragment_question, container, false);
+        tv = (TextView) root.findViewById(R.id.tvQuestionText);
+        flipper = (ViewFlipper) root.findViewById(R.id.flipper);
+        animFlipInForeward = AnimationUtils.loadAnimation(getActivity(), R.anim.flipin);
+        animFlipOutForeward = AnimationUtils.loadAnimation(getActivity(), R.anim.flipout);
+        animFlipInBackward = AnimationUtils.loadAnimation(getActivity(), R.anim.flipin_reverse);
+        animFlipOutBackward = AnimationUtils.loadAnimation(getActivity(), R.anim.flipout_reverse);
+        final GestureDetector gesture = new GestureDetector(getActivity(),
+                new GestureDetector.SimpleOnGestureListener() {
+
+                    @Override
+                    public boolean onDown(MotionEvent e) {
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+                                           float velocityY) {
+                        Log.i("Fling called", "onFling has been called!");
+                        final int SWIPE_MIN_DISTANCE = 120;
+                        final int SWIPE_MAX_OFF_PATH = 250;
+                        final int SWIPE_THRESHOLD_VELOCITY = 200;
+                        try {
+                            if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH)
+                                return false;
+                            if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE
+                                    && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+                                SwipeLeft();
+                                Log.i("Swiping right to left", "Right to Left");
+                                tv.setText("Hello!! here is the another question");
+                            } else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE
+                                    && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+                                SwipeRight();
+                                Log.i("Swipping left to right", "Left to Right");
+                                tv.setText(getString(R.string.questiondummytext));
+                            }
+                        } catch (Exception e) {
+                            // nothing
+                        }
+                        return super.onFling(e1, e2, velocityX, velocityY);
+                    }
+                });
+
+        root.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return gesture.onTouchEvent(event);
+            }
+        });
+
         inflateQuestionList(root);
         inflateOptionList(root);
         return root;
@@ -134,7 +197,7 @@ public class QuestionFragment extends Fragment {
         questionListAdapter=new QuestionListAdapter(getActivity(), questionList, new ClickListener() {
             @Override
             public void onClick(int position) {
-
+                clickListener.onClick(position);
             }
 
             @Override
@@ -186,5 +249,17 @@ public class QuestionFragment extends Fragment {
         mListener = null;
     }
 
+
+    private void SwipeRight(){
+        flipper.setInAnimation(animFlipInBackward);
+        flipper.setOutAnimation(animFlipOutBackward);
+        flipper.showPrevious();
+    }
+
+    private void SwipeLeft(){
+        flipper.setInAnimation(animFlipInForeward);
+        flipper.setOutAnimation(animFlipOutForeward);
+        flipper.showNext();
+    }
 
 }

@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.example.novo.educationtestsample.R;
@@ -23,6 +24,7 @@ public class OptionListAdapter extends RecyclerView.Adapter<OptionListAdapter.Op
     private LayoutInflater inflater;
     private Context context;
     private ClickListener clickListener;
+    CheckBox checkBox;
 
 
     public OptionListAdapter(Context context, List<Option> data, ClickListener clickListener) {
@@ -47,12 +49,15 @@ public class OptionListAdapter extends RecyclerView.Adapter<OptionListAdapter.Op
             @Override
             public void onClick(View v) {
                 clickListener.onClick(position);
-
-
+                checkBox = (CheckBox) v.findViewById(R.id.chOption);
+                if(checkBox.isChecked()){
+                    checkBox.setChecked(false);
+                }else{
+                    checkBox.setChecked(true);
+                }
             }
         });
     }
-
 
 
     @Override
@@ -66,6 +71,7 @@ public class OptionListAdapter extends RecyclerView.Adapter<OptionListAdapter.Op
         public OptionViewHolder(View itemView) {
             super(itemView);
             title=(TextView)itemView.findViewById(R.id.tvOptionNum);
+
         }
     }
 }
