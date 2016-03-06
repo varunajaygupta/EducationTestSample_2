@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Material Design</string>
+    <string name="app_name">EduTest</string>
     <string name="action_settings">Settings</string>
     <string name="action_search">Search</string>
     <string name="drawer_open">Open</string>
@@ -29,4 +29,5 @@
     <string name="questiondummytext">It is easier to roll a stone up a sloping road than to lift it vertical upwards because
     </string>
     <string name="title_activity_sa">sa</string>
+    <string name="startTest">START</string>
 </resources>

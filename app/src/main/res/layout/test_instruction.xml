@@ -19,15 +19,14 @@
         android:textSize="@dimen/d15"
         android:text="This Test is prepared to check your knowledge.To complete this test you don't need to have mathematical ability.\n\n -Each test have totally 15 questions\n\n -Time Period is: 45mins\n\n -Test start from easy one to hardest one.But most important questions are hard questions and it effects much more than easy questions on your score.\n\n -When you answer a question there are chances to back to your previously answered questions.\n\n  -You shouldn't use any pen/paper/internet search etc. while test.\n\n"/>
 
-    <TextView
-        android:id="@+id/tv_start_test"
+    <Button
+        android:id="@+id/startTest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/startTest"
         android:layout_gravity="center"
-        android:layout_margin="@dimen/d18"
-        android:text="START"
-        android:textColor="@color/colorAccent"
-        android:textStyle="bold"
-        android:textSize="20dp" />
+        android:layout_marginTop="@dimen/d19"
+
+        />
 
 </LinearLayout>

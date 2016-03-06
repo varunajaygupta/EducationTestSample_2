@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.novo.educationtestsample.R;
+import com.example.novo.educationtestsample.activities.MainActivity;
 import com.example.novo.educationtestsample.adapters.ViewPagerAdapter;
 import com.example.novo.educationtestsample.interfaces.FragmentInteractionListener;
 
@@ -43,6 +44,8 @@ public class TestFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        ((MainActivity)getActivity()).drawerFragment.setMenuVisibility(true);
+        ((MainActivity)getActivity()).mToolbar.setVisibility(View.VISIBLE);
         View root= inflater.inflate(R.layout.fragment_test, container, false);
         viewPager = (ViewPager)root. findViewById(R.id.viewpager);
         setupViewPager(viewPager);
@@ -77,15 +80,5 @@ public class TestFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
 
 }

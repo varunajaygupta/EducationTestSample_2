@@ -2,10 +2,12 @@ package com.example.novo.educationtestsample.models;
 
 import android.widget.RadioButton;
 
+import java.io.Serializable;
+
 /**
  * Created by anubhav on 23/2/16.
  */
-public class Option {
+public class Option implements Serializable{
     private String imageUrl;
     private boolean markedForReview;
     private int optionId;

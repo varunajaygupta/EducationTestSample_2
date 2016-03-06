@@ -1,11 +1,14 @@
 package com.example.novo.educationtestsample.models;
 
+import android.os.Parcelable;
+
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by anubhav on 23/2/16.
  */
-public class Test {
+public class Test implements Serializable {
     private int duration;
     private String header;
     //  private current question
