@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by Varun Ajay Gupta on 5/3/16.
  */
-public class QuestionListJSON {
+public class QuestionListJSON implements Cloneable {
     public static QuestionListJSON mquestionList=null;
     List<Question> questionList;
     static int currentQuestion=0;
@@ -26,6 +26,11 @@ public class QuestionListJSON {
             mquestionList=new QuestionListJSON();
         }
         return mquestionList;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 
 

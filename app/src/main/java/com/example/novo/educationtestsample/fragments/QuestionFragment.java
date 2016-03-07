@@ -216,8 +216,8 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
 
 
     private void SwipeRight(){
-        if(questionListJSON.getCurrentQuestion()+1< questionListJSON.getQuestionList().size()) {
-            questionListJSON.setCurrentQuestion(questionListJSON.getCurrentQuestion() + 1);
+        if(questionListJSON.getCurrentQuestion()>0) {
+            questionListJSON.setCurrentQuestion(questionListJSON.getCurrentQuestion() - 1);
             Log.e("AfterSwiping", String.valueOf(questionListJSON.getCurrentQuestion()));
             resetData();
         }
@@ -227,8 +227,8 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
     }
 
     private void SwipeLeft(){
-        if(questionListJSON.getCurrentQuestion()>0) {
-            questionListJSON.setCurrentQuestion(questionListJSON.getCurrentQuestion() - 1);
+        if(questionListJSON.getCurrentQuestion()+1< questionListJSON.getQuestionList().size()) {
+            questionListJSON.setCurrentQuestion(questionListJSON.getCurrentQuestion() + 1);
             Log.e("AfterSwiping", String.valueOf(questionListJSON.getCurrentQuestion()));
             resetData();
         }
@@ -240,7 +240,7 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
         // questionImage.setImageDrawable();
         questionText.setText(questionList.get(questionListJSON.getCurrentQuestion()).getQuestion_title());
         questionMarks.setText(String.valueOf(questionList.get(questionListJSON.getCurrentQuestion()).getQuestion_marks()));
-   //     optionListAdapter.data.clear();
+       optionListAdapter.data.clear();
         optionListAdapter.data=questionListJSON.getQuestionList().get(questionListJSON.getCurrentQuestion()).getAnswer_array();
         optionListAdapter.notifyDataSetChanged();
         questionListAdapter.notifyDataSetChanged();
@@ -266,13 +266,6 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            /*case R.id.leftbutton:
-                swipingLeft();
-            break;
-
-            case R.id.rightbutton:
-                swipingRight();
-            break;*/
             case R.id.btn_mark_for_review:
                  if(questionListJSON.getQuestionList().get(questionListJSON.getCurrentQuestion()).getIsMarkedForReview()){
                      questionListJSON.getQuestionList().get(questionListJSON.getCurrentQuestion()).setIsMarkedForReview(false);

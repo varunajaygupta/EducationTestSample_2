@@ -18,12 +18,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/dummytext"
-                android:layout_centerInParent="true" />
+                android:layout_centerInParent="true"
+                android:padding="@dimen/d10"
+                />
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/next"
-                android:layout_alignParentRight="true" />
+                android:layout_alignParentRight="true"
+                android:visibility="gone" />
         </RelativeLayout>
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvQuestionList"

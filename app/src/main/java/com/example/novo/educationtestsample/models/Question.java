@@ -10,7 +10,7 @@ import java.util.List;
  * Created by anubhav on 23/2/16.
  */
 
-public class Question
+public class Question implements  Cloneable
 {
     private String question_marks;
 
@@ -34,7 +34,10 @@ public class Question
 
     private Boolean isMarkedForReview=Boolean.FALSE;
 
-
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 
     public String getQuestion_title ()
     {

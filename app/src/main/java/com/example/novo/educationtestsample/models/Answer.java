@@ -11,6 +11,17 @@ public class Answer
 
     private String answer_title;
 
+
+    public Answer(Answer answer) {
+       this.answer_image=answer.answer_image;
+        this.answer_marked=answer.answer_marked;
+        this.answer_title=answer.answer_title;
+    }
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+
     public String getAnswer_image ()
     {
         return answer_image;
