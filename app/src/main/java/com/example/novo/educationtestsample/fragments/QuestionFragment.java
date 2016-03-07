@@ -59,7 +59,7 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
     Animation animFlipOutBackward;
     QuestionListJSON questionListJSON;
     Button markForReview;
-    Button leftbutton,rightbutton;
+//    Button leftbutton,rightbutton;
 
 
     public QuestionFragment() {
@@ -85,12 +85,12 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         View root= inflater.inflate(R.layout.fragment_question, container, false);
         //TODO remove later
-        leftbutton=(Button)root.findViewById(R.id.leftbutton);
-        rightbutton=(Button)root.findViewById(R.id.rightbutton);
+       /* leftbutton=(Button)root.findViewById(R.id.leftbutton);
+        rightbutton=(Button)root.findViewById(R.id.rightbutton);*/
         markForReview=(Button)root.findViewById(R.id.btn_mark_for_review);
         markForReview.setOnClickListener(this);
-        leftbutton.setOnClickListener(this);
-        rightbutton.setOnClickListener(this);
+        /*leftbutton.setOnClickListener(this);
+        rightbutton.setOnClickListener(this);*/
         questionImage=(ImageView)root.findViewById(R.id.ivQuestion);
         questionText=(TextView)root.findViewById(R.id.tvQuestionText);
         questionMarks=(TextView)root.findViewById(R.id.tvQuestionMarks);
@@ -123,7 +123,6 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
                                     && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
                                 SwipeLeft();
                                 Log.i("Swiping right to left", "Right to Left");
-                                tv.setText("Hello!! here is the another question");
                             } else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE
                                     && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
                                 SwipeRight();
@@ -217,12 +216,22 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
 
 
     private void SwipeRight(){
+        if(questionListJSON.getCurrentQuestion()+1< questionListJSON.getQuestionList().size()) {
+            questionListJSON.setCurrentQuestion(questionListJSON.getCurrentQuestion() + 1);
+            Log.e("AfterSwiping", String.valueOf(questionListJSON.getCurrentQuestion()));
+            resetData();
+        }
         flipper.setInAnimation(animFlipInBackward);
         flipper.setOutAnimation(animFlipOutBackward);
         flipper.showPrevious();
     }
 
     private void SwipeLeft(){
+        if(questionListJSON.getCurrentQuestion()>0) {
+            questionListJSON.setCurrentQuestion(questionListJSON.getCurrentQuestion() - 1);
+            Log.e("AfterSwiping", String.valueOf(questionListJSON.getCurrentQuestion()));
+            resetData();
+        }
         flipper.setInAnimation(animFlipInForeward);
         flipper.setOutAnimation(animFlipOutForeward);
         flipper.showNext();
@@ -257,13 +266,13 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.leftbutton:
+            /*case R.id.leftbutton:
                 swipingLeft();
             break;
 
             case R.id.rightbutton:
                 swipingRight();
-            break;
+            break;*/
             case R.id.btn_mark_for_review:
                  if(questionListJSON.getQuestionList().get(questionListJSON.getCurrentQuestion()).getIsMarkedForReview()){
                      questionListJSON.getQuestionList().get(questionListJSON.getCurrentQuestion()).setIsMarkedForReview(false);

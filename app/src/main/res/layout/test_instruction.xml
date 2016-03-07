@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_result"
         android:layout_gravity="center"
-        android:layout_margin="@dimen/d35"/>
+        android:layout_margin="@dimen/d20"/>
 
     <TextView
         android:id="@+id/tv_test_instruction"
