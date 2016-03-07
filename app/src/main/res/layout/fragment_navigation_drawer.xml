@@ -9,13 +9,19 @@
 
     <include
         android:id="@+id/navigation_header"
-        layout="@layout/nav_header" />
+        layout="@layout/nav_header"
+        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+
+        />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/drawerList"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginTop="15dp"
+        android:layout_weight="1"
         android:layout_below="@+id/navigation_header"
         app:menu="@menu/drawer" />
 

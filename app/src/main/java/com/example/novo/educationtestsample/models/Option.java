@@ -1,20 +1,68 @@
 package com.example.novo.educationtestsample.models;
 
+import android.widget.RadioButton;
+
+import java.io.Serializable;
+
 /**
- * Created by Varun Ajay Gupta on 2/3/16.
+ * Created by anubhav on 23/2/16.
  */
-public class Option {
-    String optionText;
+public class Option implements Serializable{
+    private String imageUrl;
+    private boolean markedForReview;
+    private int optionId;
+    private boolean selected;
+    private String title;
 
-    public Option(String s) {
-        this.optionText=s;
+//    private RadioButton radioButton;
+
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public String getOptionText() {
-        return optionText;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
-    public void setOptionText(String optionText) {
-        this.optionText = optionText;
+//    public RadioButton getRadioButton() {
+//        return radioButton;
+//    }
+//
+//    public void setRadioButton(RadioButton radioButton) {
+//        this.radioButton = radioButton;
+//    }
+
+    public Boolean getMarkedForReview() {
+        return markedForReview;
     }
+
+    public void setMarkedForReview(boolean markedForReview) {
+        this.markedForReview = markedForReview;
+    }
+
+    public int getOptionId() {
+        return optionId;
+    }
+
+    public void setOptionId(int optionId) {
+        this.optionId = optionId;
+    }
+
+    public boolean getSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+
 }

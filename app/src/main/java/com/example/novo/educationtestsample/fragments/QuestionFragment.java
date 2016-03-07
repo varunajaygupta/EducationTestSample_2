@@ -8,13 +8,17 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
@@ -24,14 +28,16 @@ import com.example.novo.educationtestsample.adapters.OptionListAdapter;
 import com.example.novo.educationtestsample.adapters.QuestionListAdapter;
 import com.example.novo.educationtestsample.interfaces.ClickListener;
 import com.example.novo.educationtestsample.interfaces.FragmentInteractionListener;
+import com.example.novo.educationtestsample.models.Answer;
 import com.example.novo.educationtestsample.models.Option;
 import com.example.novo.educationtestsample.models.Question;
+import com.example.novo.educationtestsample.models.QuestionListJSON;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class QuestionFragment extends Fragment {
+public class QuestionFragment extends Fragment implements View.OnClickListener {
 
     FragmentInteractionListener mListener;
     private RecyclerView optionRecyclerView;
@@ -39,9 +45,11 @@ public class QuestionFragment extends Fragment {
     private  TextView tv;
     ViewFlipper flipper;
     ImageView questionImage;
+    TextView  questionText;
+    TextView  questionMarks;
     OptionListAdapter optionListAdapter;
     QuestionListAdapter questionListAdapter;
-    List<Option> optionList;
+    List<Answer> optionList;
     List<Question> questionList;
     LinearLayoutManager questionListLinearLayoutManager;
     private ClickListener clickListener;
@@ -49,6 +57,11 @@ public class QuestionFragment extends Fragment {
     Animation animFlipOutForeward;
     Animation animFlipInBackward;
     Animation animFlipOutBackward;
+    QuestionListJSON questionListJSON;
+    Button markForReview;
+    Button leftbutton,rightbutton;
+
+
     public QuestionFragment() {
         // Required empty public constructor
     }
@@ -59,76 +72,11 @@ public class QuestionFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        optionList = new ArrayList<Option>();
-        optionList.add(new Option("A"));
-        optionList.add(new Option("A"));
-        optionList.add(new Option("A"));
-        optionList.add(new Option("A"));
-//        optionList.add(new Option("A"));
-//        optionList.add(new Option("A"));
-//        optionList.add(new Option("A"));
-//        optionList.add(new Option("A"));
-//        optionList.add(new Option("A"));
-//        optionList.add(new Option("A"));
-//        optionList.add(new Option("A"));
-//        optionList.add(new Option("A"));
-//        optionList.add(new Option("A"));
-//        optionList.add(new Option("A"));
-//        optionList.add(new Option("A"));
-//        optionList.add(new Option("A"));
-//        optionList.add(new Option("A"));
-//        optionList.add(new Option("A"));
-
-        questionList=new ArrayList<Question>();
-        questionList.add(new Question("1"));
-        questionList.add(new Question("2"));
-        questionList.add(new Question("3"));
-        questionList.add(new Question("4"));
-        questionList.add(new Question("5"));
-        questionList.add(new Question("6"));
-        questionList.add(new Question("7"));
-        questionList.add(new Question("8"));
-        questionList.add(new Question("1"));
-        questionList.add(new Question("2"));
-        questionList.add(new Question("3"));
-        questionList.add(new Question("4"));
-        questionList.add(new Question("5"));
-        questionList.add(new Question("6"));
-        questionList.add(new Question("7"));
-        questionList.add(new Question("8"));
-        questionList.add(new Question("1"));
-        questionList.add(new Question("2"));
-        questionList.add(new Question("3"));
-        questionList.add(new Question("4"));
-        questionList.add(new Question("5"));
-        questionList.add(new Question("6"));
-        questionList.add(new Question("7"));
-        questionList.add(new Question("8"));
-        questionList.add(new Question("1"));
-        questionList.add(new Question("2"));
-        questionList.add(new Question("3"));
-        questionList.add(new Question("4"));
-        questionList.add(new Question("5"));
-        questionList.add(new Question("6"));
-        questionList.add(new Question("7"));
-        questionList.add(new Question("8"));
-        questionList.add(new Question("1"));
-        questionList.add(new Question("2"));
-        questionList.add(new Question("3"));
-        questionList.add(new Question("4"));
-        questionList.add(new Question("5"));
-        questionList.add(new Question("6"));
-        questionList.add(new Question("7"));
-        questionList.add(new Question("8"));
-        questionList.add(new Question("1"));
-        questionList.add(new Question("2"));
-        questionList.add(new Question("3"));
-        questionList.add(new Question("4"));
-        questionList.add(new Question("5"));
-        questionList.add(new Question("6"));
-        questionList.add(new Question("7"));
-        questionList.add(new Question("8"));
-
+        optionList = new ArrayList<>();
+        questionList=new ArrayList<>();
+        questionListJSON=QuestionListJSON.getInstance();
+        questionList=questionListJSON.getQuestionList();
+        optionList= questionListJSON.getQuestionList().get(questionListJSON.getCurrentQuestion()).getAnswer_array();
     }
 
     @Override
@@ -136,6 +84,17 @@ public class QuestionFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root= inflater.inflate(R.layout.fragment_question, container, false);
+        //TODO remove later
+        leftbutton=(Button)root.findViewById(R.id.leftbutton);
+        rightbutton=(Button)root.findViewById(R.id.rightbutton);
+        markForReview=(Button)root.findViewById(R.id.btn_mark_for_review);
+        markForReview.setOnClickListener(this);
+        leftbutton.setOnClickListener(this);
+        rightbutton.setOnClickListener(this);
+        questionImage=(ImageView)root.findViewById(R.id.ivQuestion);
+        questionText=(TextView)root.findViewById(R.id.tvQuestionText);
+        questionMarks=(TextView)root.findViewById(R.id.tvQuestionMarks);
+        inflateQuestionData(root);
         tv = (TextView) root.findViewById(R.id.tvQuestionText);
         flipper = (ViewFlipper) root.findViewById(R.id.flipper);
         animFlipInForeward = AnimationUtils.loadAnimation(getActivity(), R.anim.flipin);
@@ -190,6 +149,12 @@ public class QuestionFragment extends Fragment {
         return root;
     }
 
+    private void inflateQuestionData(View root) {
+       // questionImage.setImageDrawable();
+        questionText.setText(questionList.get(questionListJSON.getCurrentQuestion()).getQuestion_title());
+        questionMarks.setText(String.valueOf(questionList.get(questionListJSON.getCurrentQuestion()).getQuestion_marks()));
+    }
+
     private void inflateQuestionList(View root) {
         questionListLinearLayoutManager = new LinearLayoutManager(getActivity());
         questionListLinearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -197,7 +162,8 @@ public class QuestionFragment extends Fragment {
         questionListAdapter=new QuestionListAdapter(getActivity(), questionList, new ClickListener() {
             @Override
             public void onClick(int position) {
-                clickListener.onClick(position);
+            questionListJSON.setCurrentQuestion(position);
+            resetData();
             }
 
             @Override
@@ -261,5 +227,53 @@ public class QuestionFragment extends Fragment {
         flipper.setOutAnimation(animFlipOutForeward);
         flipper.showNext();
     }
+    void resetData(){
+        // questionImage.setImageDrawable();
+        questionText.setText(questionList.get(questionListJSON.getCurrentQuestion()).getQuestion_title());
+        questionMarks.setText(String.valueOf(questionList.get(questionListJSON.getCurrentQuestion()).getQuestion_marks()));
+   //     optionListAdapter.data.clear();
+        optionListAdapter.data=questionListJSON.getQuestionList().get(questionListJSON.getCurrentQuestion()).getAnswer_array();
+        optionListAdapter.notifyDataSetChanged();
+        questionListAdapter.notifyDataSetChanged();
 
+    }
+    void swipingRight(){
+        Log.e("CurrentQuestion",String.valueOf(questionListJSON.getCurrentQuestion()));
+        if(questionListJSON.getCurrentQuestion()+1< questionListJSON.getQuestionList().size()) {
+            questionListJSON.setCurrentQuestion(questionListJSON.getCurrentQuestion() + 1);
+            Log.e("AfterSwiping", String.valueOf(questionListJSON.getCurrentQuestion()));
+            resetData();
+        }
+    }
+    void swipingLeft(){
+        Log.e("CurrentQuestion",String.valueOf(questionListJSON.getCurrentQuestion()));
+        if(questionListJSON.getCurrentQuestion()>0) {
+        questionListJSON.setCurrentQuestion(questionListJSON.getCurrentQuestion() - 1);
+        Log.e("AfterSwiping", String.valueOf(questionListJSON.getCurrentQuestion()));
+         resetData();
+    }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.leftbutton:
+                swipingLeft();
+            break;
+
+            case R.id.rightbutton:
+                swipingRight();
+            break;
+            case R.id.btn_mark_for_review:
+                 if(questionListJSON.getQuestionList().get(questionListJSON.getCurrentQuestion()).getIsMarkedForReview()){
+                     questionListJSON.getQuestionList().get(questionListJSON.getCurrentQuestion()).setIsMarkedForReview(false);
+                     Toast.makeText(getActivity(),"UnMarked for review",Toast.LENGTH_SHORT).show();
+                 }else {
+                     Toast.makeText(getActivity(),"Marked for review",Toast.LENGTH_SHORT).show();
+                     questionListJSON.getQuestionList().get(questionListJSON.getCurrentQuestion()).setIsMarkedForReview(true);
+                 }
+            break;
+
+        }
+    }
 }

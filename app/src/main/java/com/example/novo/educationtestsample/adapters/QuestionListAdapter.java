@@ -1,6 +1,8 @@
 package com.example.novo.educationtestsample.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +12,7 @@ import android.widget.TextView;
 import com.example.novo.educationtestsample.R;
 import com.example.novo.educationtestsample.interfaces.ClickListener;
 import com.example.novo.educationtestsample.models.Question;
+import com.example.novo.educationtestsample.models.QuestionListJSON;
 
 import java.util.Collections;
 import java.util.List;
@@ -23,6 +26,7 @@ public class QuestionListAdapter extends RecyclerView.Adapter<QuestionListAdapte
     private LayoutInflater inflater;
     private Context context;
     private ClickListener clickListener;
+    QuestionListJSON questionListJSON=QuestionListJSON.getInstance();
 
 
     public QuestionListAdapter(Context context, List<Question> data, ClickListener clickListener) {
@@ -40,7 +44,14 @@ public class QuestionListAdapter extends RecyclerView.Adapter<QuestionListAdapte
 
     @Override
     public void onBindViewHolder(QuestionViewHolder holder, final int position) {
-        holder.questionNumber.setText(questionList.get(position).getQuestionNumber());
+        holder.questionNumber.setText(String.valueOf(position));
+        if (questionListJSON.getQuestionList().get(position).getIsMarkedForReview()){
+            holder.questionNumber.setTextColor(Color.RED);
+        }
+        else if(questionListJSON.getCurrentQuestion()==(position)){
+            holder.questionNumber.setTextColor(Color.GREEN);
+        }
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

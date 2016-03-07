@@ -92,7 +92,7 @@ public class AvailableTests extends Fragment {
          testAdapter=new TestAdapter(getActivity(), new ArrayList<TestItem>(), new ClickListener() {
             @Override
             public void onClick(int position) {
-                mListener.replaceFragment(new QuestionFragment(),"Questions");
+                mListener.replaceFragment(new TestInstructionsFragment(),"Instructions");
             }
 
             @Override
