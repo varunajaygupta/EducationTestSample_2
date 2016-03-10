@@ -2,6 +2,7 @@ package com.example.novo.educationtestsample.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -59,14 +60,27 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
     Animation animFlipOutBackward;
     QuestionListJSON questionListJSON;
     Button markForReview;
-//    Button leftbutton,rightbutton;
+    Question currentQuestion;
+    TextView countDownTimer;
 
 
     public QuestionFragment() {
         // Required empty public constructor
     }
 
+    public void startCountDownTimer(int time){
+        new CountDownTimer(time, 1000) {
 
+            public void onTick(long millisUntilFinished) {
+                countDownTimer.setText("Time left: "+String.valueOf(millisUntilFinished / 1000));
+            }
+
+            public void onFinish() {
+                countDownTimer.setText("Finish!");
+            }
+        }.start();
+
+    }
 
 
     @Override
@@ -76,7 +90,12 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
         questionList=new ArrayList<>();
         questionListJSON=QuestionListJSON.getInstance();
         questionList=questionListJSON.getQuestionList();
-        optionList= questionListJSON.getQuestionList().get(questionListJSON.getCurrentQuestion()).getAnswer_array();
+        try {
+            currentQuestion= (Question) questionList.get(questionListJSON.getCurrentQuestion()).clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        optionList= currentQuestion.getAnswer_array();
     }
 
     @Override
@@ -84,18 +103,13 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root= inflater.inflate(R.layout.fragment_question, container, false);
-        //TODO remove later
-       /* leftbutton=(Button)root.findViewById(R.id.leftbutton);
-        rightbutton=(Button)root.findViewById(R.id.rightbutton);*/
         markForReview=(Button)root.findViewById(R.id.btn_mark_for_review);
+        countDownTimer=(TextView)root.findViewById(R.id.tv_timer);
         markForReview.setOnClickListener(this);
-        /*leftbutton.setOnClickListener(this);
-        rightbutton.setOnClickListener(this);*/
         questionImage=(ImageView)root.findViewById(R.id.ivQuestion);
         questionText=(TextView)root.findViewById(R.id.tvQuestionText);
         questionMarks=(TextView)root.findViewById(R.id.tvQuestionMarks);
         inflateQuestionData(root);
-        tv = (TextView) root.findViewById(R.id.tvQuestionText);
         flipper = (ViewFlipper) root.findViewById(R.id.flipper);
         animFlipInForeward = AnimationUtils.loadAnimation(getActivity(), R.anim.flipin);
         animFlipOutForeward = AnimationUtils.loadAnimation(getActivity(), R.anim.flipout);
@@ -127,7 +141,6 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
                                     && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
                                 SwipeRight();
                                 Log.i("Swipping left to right", "Left to Right");
-                                tv.setText(getString(R.string.questiondummytext));
                             }
                         } catch (Exception e) {
                             // nothing
@@ -145,13 +158,14 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
 
         inflateQuestionList(root);
         inflateOptionList(root);
+        startCountDownTimer(20);
         return root;
     }
 
     private void inflateQuestionData(View root) {
        // questionImage.setImageDrawable();
-        questionText.setText(questionList.get(questionListJSON.getCurrentQuestion()).getQuestion_title());
-        questionMarks.setText(String.valueOf(questionList.get(questionListJSON.getCurrentQuestion()).getQuestion_marks()));
+        questionText.setText(currentQuestion.getQuestion_title());
+        questionMarks.setText(String.valueOf(currentQuestion.getQuestion_marks()));
     }
 
     private void inflateQuestionList(View root) {
@@ -162,7 +176,7 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onClick(int position) {
             questionListJSON.setCurrentQuestion(position);
-            resetData();
+                resetData();
             }
 
             @Override
@@ -218,7 +232,6 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
     private void SwipeRight(){
         if(questionListJSON.getCurrentQuestion()>0) {
             questionListJSON.setCurrentQuestion(questionListJSON.getCurrentQuestion() - 1);
-            Log.e("AfterSwiping", String.valueOf(questionListJSON.getCurrentQuestion()));
             resetData();
         }
         flipper.setInAnimation(animFlipInBackward);
@@ -229,7 +242,6 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
     private void SwipeLeft(){
         if(questionListJSON.getCurrentQuestion()+1< questionListJSON.getQuestionList().size()) {
             questionListJSON.setCurrentQuestion(questionListJSON.getCurrentQuestion() + 1);
-            Log.e("AfterSwiping", String.valueOf(questionListJSON.getCurrentQuestion()));
             resetData();
         }
         flipper.setInAnimation(animFlipInForeward);
@@ -237,31 +249,19 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
         flipper.showNext();
     }
     void resetData(){
+        try {
+            currentQuestion= (Question) questionList.get(questionListJSON.getCurrentQuestion()).clone();
         // questionImage.setImageDrawable();
-        questionText.setText(questionList.get(questionListJSON.getCurrentQuestion()).getQuestion_title());
-        questionMarks.setText(String.valueOf(questionList.get(questionListJSON.getCurrentQuestion()).getQuestion_marks()));
-       optionListAdapter.data.clear();
-        optionListAdapter.data=questionListJSON.getQuestionList().get(questionListJSON.getCurrentQuestion()).getAnswer_array();
+        questionText.setText(currentQuestion.getQuestion_title());
+        questionMarks.setText(String.valueOf(currentQuestion.getQuestion_marks()));
+        optionListAdapter.data=currentQuestion.getAnswer_array();
         optionListAdapter.notifyDataSetChanged();
         questionListAdapter.notifyDataSetChanged();
-
-    }
-    void swipingRight(){
-        Log.e("CurrentQuestion",String.valueOf(questionListJSON.getCurrentQuestion()));
-        if(questionListJSON.getCurrentQuestion()+1< questionListJSON.getQuestionList().size()) {
-            questionListJSON.setCurrentQuestion(questionListJSON.getCurrentQuestion() + 1);
-            Log.e("AfterSwiping", String.valueOf(questionListJSON.getCurrentQuestion()));
-            resetData();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
         }
     }
-    void swipingLeft(){
-        Log.e("CurrentQuestion",String.valueOf(questionListJSON.getCurrentQuestion()));
-        if(questionListJSON.getCurrentQuestion()>0) {
-        questionListJSON.setCurrentQuestion(questionListJSON.getCurrentQuestion() - 1);
-        Log.e("AfterSwiping", String.valueOf(questionListJSON.getCurrentQuestion()));
-         resetData();
-    }
-    }
+
 
     @Override
     public void onClick(View v) {
@@ -277,5 +277,8 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
             break;
 
         }
+    }
+    public void onSave(){
+        questionListJSON.getQuestionList().set(questionListJSON.getCurrentQuestion(),currentQuestion);
     }
 }

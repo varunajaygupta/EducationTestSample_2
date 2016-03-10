@@ -1,5 +1,6 @@
 package com.example.novo.educationtestsample.fragments;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -12,14 +13,21 @@ import android.view.ViewGroup;
 
 import com.example.novo.educationtestsample.MyAsyncTask;
 import com.example.novo.educationtestsample.R;
+import com.example.novo.educationtestsample.Utils;
 import com.example.novo.educationtestsample.adapters.TestAdapter;
 import com.example.novo.educationtestsample.interfaces.ClickListener;
 import com.example.novo.educationtestsample.interfaces.FragmentInteractionListener;
 import com.example.novo.educationtestsample.interfaces.ResponseCallback;
-import com.example.novo.educationtestsample.models.TestItem;
+import com.example.novo.educationtestsample.models.Question;
+import com.example.novo.educationtestsample.models.Test;
+import com.example.novo.educationtestsample.models.Test;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 
@@ -28,7 +36,8 @@ public class AvailableTests extends Fragment {
     FragmentInteractionListener mListener;
     private RecyclerView recyclerView;
     private TestAdapter testAdapter;
-    public static List<TestItem> testItemList;
+    public static List<Test> testList;
+    ProgressDialog progress;
 
 
     public AvailableTests() {
@@ -40,45 +49,42 @@ public class AvailableTests extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        testItemList= new ArrayList<TestItem>();
-        testItemList.add(new TestItem("Test 1"));
-        testItemList.add(new TestItem("Test 1"));
-        testItemList.add(new TestItem("Test 1"));
-        testItemList.add(new TestItem("Test 1"));
-        testItemList.add(new TestItem("Test 1"));
-        testItemList.add(new TestItem("Test 1"));
-        testItemList.add(new TestItem("Test 1"));
-        testItemList.add(new TestItem("Test 1"));
-        testItemList.add(new TestItem("Test 1"));
-        testItemList.add(new TestItem("Test 1"));
-        testItemList.add(new TestItem("Test 1"));
-        testItemList.add(new TestItem("Test 1"));
-        testItemList.add(new TestItem("Test 1"));
-        testItemList.add(new TestItem("Test 1"));
-        testItemList.add(new TestItem("Test 1"));
-        testItemList.add(new TestItem("Test 1"));
-        testItemList.add(new TestItem("Test 1"));
-        testItemList.add(new TestItem("Test 1"));
 
+        testList= new ArrayList<Test>();
+        Gson gson= new Gson();
+        Type collectionType = new TypeToken<Collection<Test>>(){}.getType();
+        testList = gson.fromJson(Utils.loadJSONfromAssests(getContext(), "Quiz.json"), collectionType);
 
 
     }
 
     private void getTopicsList() {
-        MyAsyncTask myAsyncTask= new MyAsyncTask("", "", new ResponseCallback() {
-            //TO DO
+//        startLoader();
+//        MyAsyncTask myAsyncTask= new MyAsyncTask("", "", new ResponseCallback() {
+//            //TO DO
+//
+//            @Override
+//            public void onResult(String Response) {
+//                testAdapter.setData(TestList);
+//                testAdapter.notifyDataSetChanged();
+//
+//
+//            }
+//        });
+//         myAsyncTask.execute();
+//
+        testAdapter.setData(testList);
+        testAdapter.notifyDataSetChanged();
 
-            @Override
-            public void onResult(String Response) {
-                testAdapter.setData(testItemList);
-                testAdapter.notifyDataSetChanged();
 
+    }
 
-            }
-        });
-         myAsyncTask.execute();
-
-
+    private void startLoader() {
+        progress = ProgressDialog.show(getContext(), "Loading",
+                "Loading tests ", true);
+    }
+    private void stopLoader(){
+        progress.dismiss();
     }
 
     @Override
@@ -89,7 +95,7 @@ public class AvailableTests extends Fragment {
          recyclerView=(RecyclerView)view.findViewById(R.id.topicList);
          recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getActivity()).color(Color.WHITE)
                  .sizeResId(R.dimen.divider).build());
-         testAdapter=new TestAdapter(getActivity(), new ArrayList<TestItem>(), new ClickListener() {
+         testAdapter=new TestAdapter(getActivity(),testList, new ClickListener() {
             @Override
             public void onClick(int position) {
                 mListener.replaceFragment(new TestInstructionsFragment(),"Instructions");
@@ -99,10 +105,10 @@ public class AvailableTests extends Fragment {
             public void onLongClick(int position) {
 
             }
-        });
+         });
         recyclerView.setAdapter(testAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        getTopicsList();
+     //   getTopicsList();
          return view;
     }
 

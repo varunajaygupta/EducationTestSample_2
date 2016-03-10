@@ -12,21 +12,41 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/light_grey"
-            android:layout_alignParentTop="true">
+            android:layout_alignParentTop="true"
+            android:gravity="center"
+            >
             <TextView
-                android:id="@+id/img_next"
+                android:id="@+id/tv_timer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/dummytext"
-                android:layout_centerInParent="true"
+                android:layout_alignParentRight="true"
                 android:padding="@dimen/d10"
+                android:textStyle="bold"
                 />
-            <ImageView
+            <TextView
+                android:id="@+id/tv_attempted_questions"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/next"
-                android:layout_alignParentRight="true"
-                android:visibility="gone" />
+                android:text="@string/noofattemptedquestions"
+                android:paddingTop="@dimen/d10"
+                android:paddingBottom="@dimen/d10"
+                android:paddingLeft="@dimen/d10"
+                android:padding="@dimen/d10"
+                android:textStyle="bold"
+
+                />
+            <TextView
+                android:id="@+id/noofattemptedquestions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/tv_attempted_questions"
+                android:text="1"
+                android:paddingTop="@dimen/d10"
+                android:paddingBottom="@dimen/d10"
+                android:paddingRight="@dimen/d10"
+                android:textStyle="bold"
+                />
         </RelativeLayout>
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvQuestionList"
@@ -35,7 +55,10 @@
             android:layout_below="@+id/rl_timerbar"
             android:background="@color/black"
             android:paddingTop="@dimen/d3"
-            android:paddingBottom="@dimen/d3"/>
+            android:paddingBottom="@dimen/d3"
+            android:paddingLeft="@dimen/d10"
+
+            />
         <ViewFlipper
             android:id="@+id/flipper"
             android:layout_width="match_parent"
@@ -98,7 +121,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_below="@+id/cvQuestion"
-                    android:layout_alignParentBottom="true"/>
+                    android:layout_alignParentBottom="true"
+
+                    />
             </RelativeLayout>
         </ViewFlipper>
     </RelativeLayout>

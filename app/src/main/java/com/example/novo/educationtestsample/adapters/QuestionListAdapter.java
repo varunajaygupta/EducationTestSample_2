@@ -44,12 +44,14 @@ public class QuestionListAdapter extends RecyclerView.Adapter<QuestionListAdapte
 
     @Override
     public void onBindViewHolder(QuestionViewHolder holder, final int position) {
-        holder.questionNumber.setText(String.valueOf(position));
+        holder.questionNumber.setText(String.valueOf(position+1));
         if (questionListJSON.getQuestionList().get(position).getIsMarkedForReview()){
             holder.questionNumber.setTextColor(Color.RED);
         }
         else if(questionListJSON.getCurrentQuestion()==(position)){
             holder.questionNumber.setTextColor(Color.GREEN);
+            holder.questionNumber.setTextSize(20);
+
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -62,7 +64,7 @@ public class QuestionListAdapter extends RecyclerView.Adapter<QuestionListAdapte
 
     @Override
     public int getItemCount() {
-        return questionList.size();
+        return questionListJSON.getQuestionList().size();
     }
 
     public class QuestionViewHolder extends RecyclerView.ViewHolder{

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.novo.educationtestsample.R;
+import com.example.novo.educationtestsample.Utils;
 import com.example.novo.educationtestsample.interfaces.FragmentInteractionListener;
 import com.example.novo.educationtestsample.models.Question;
 import com.example.novo.educationtestsample.models.QuestionListJSON;
@@ -89,30 +90,14 @@ public class TestInstructionsFragment extends Fragment implements View.OnClickLi
 //            }
 //        });
         Gson gson= new Gson();
-     //   questionList=gson.fromJson(loadJSONfromAssests(json),QuestionList.class);
         Type collectionType = new TypeToken<Collection<Question>>(){}.getType();
-        Collection<Question> questionList = gson.fromJson(loadJSONfromAssests(), collectionType);
+        Collection<Question> questionList = gson.fromJson(Utils.loadJSONfromAssests(getActivity(), "dummyJSON.json"), collectionType);
         QuestionListJSON.getInstance().setQuestionList((List)questionList);
         Log.e("JSON",questionList.toString());
         mListener.replaceFragment(new QuestionFragment(),"Question");
 
     }
 
-    private String loadJSONfromAssests() {
-        InputStream is = null;
-        String json=null;
-        try {
-            is = getActivity().getAssets().open("dummyJSON.json");
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, "UTF-8");
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return json;
-    }
 
 }

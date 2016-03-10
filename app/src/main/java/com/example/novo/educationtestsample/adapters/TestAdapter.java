@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.example.novo.educationtestsample.R;
 import com.example.novo.educationtestsample.interfaces.ClickListener;
 import com.example.novo.educationtestsample.models.NavDrawerItem;
-import com.example.novo.educationtestsample.models.TestItem;
+import com.example.novo.educationtestsample.models.Test;
 
 import java.util.Collections;
 import java.util.List;
@@ -19,20 +19,20 @@ import java.util.List;
  * Created by Varun Ajay Gupta on 1/3/16.
  */
 public class TestAdapter extends RecyclerView.Adapter<TestAdapter.TestViewHolder> {
-   public List<TestItem> data = Collections.emptyList();
+   public List<Test> data = Collections.emptyList();
     private LayoutInflater inflater;
     private Context context;
     private ClickListener clickListener;
 
-    public List<TestItem> getData() {
+    public List<Test> getData() {
         return data;
     }
 
-    public void setData(List<TestItem> data) {
+    public void setData(List<Test> data) {
         this.data = data;
     }
 
-    public TestAdapter(Context context, List<TestItem> data, ClickListener clickListener) {
+    public TestAdapter(Context context, List<Test> data, ClickListener clickListener) {
         this.context = context;
         inflater = LayoutInflater.from(context);
         this.data = data;
@@ -52,7 +52,7 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.TestViewHolder
 
     @Override
     public void onBindViewHolder(TestViewHolder holder, final int position) {
-        holder.title.setText(data.get(position).getRowTitle());
+        holder.title.setText(data.get(position).getTitle());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
