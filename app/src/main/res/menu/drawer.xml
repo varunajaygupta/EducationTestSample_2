@@ -3,17 +3,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/inbox"
+            android:id="@+id/test"
             android:checked="false"
             android:icon="@drawable/ic_test"
             android:title="@string/title_test" />
         <item
-            android:id="@+id/starred"
+            android:id="@+id/forum"
             android:checked="false"
             android:icon="@drawable/ic_forum"
             android:title="@string/title_forum" />
         <item
-            android:id="@+id/sent_mail"
+            android:id="@+id/results"
             android:checked="false"
             android:icon="@drawable/ic_result"
             android:title="@string/title_result" />

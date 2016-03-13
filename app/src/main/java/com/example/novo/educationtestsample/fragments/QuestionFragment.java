@@ -190,7 +190,7 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
     }
 
     private void inflateOptionList(View root) {
-        ((MainActivity)getActivity()).drawerFragment.setMenuVisibility(false);
+        //((MainActivity)getActivity()).drawerFragment.setMenuVisibility(false);
         ((MainActivity)getActivity()).mToolbar.setVisibility(View.GONE);
         optionRecyclerView =(RecyclerView)root.findViewById(R.id.optionList);
         optionListAdapter=new OptionListAdapter(getActivity(),optionList, new ClickListener() {

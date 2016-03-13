@@ -44,7 +44,7 @@ public class TestFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        ((MainActivity)getActivity()).drawerFragment.setMenuVisibility(true);
+      //  ((MainActivity)getActivity()).drawerFragment.setMenuVisibility(true);
         ((MainActivity)getActivity()).mToolbar.setVisibility(View.VISIBLE);
         View root= inflater.inflate(R.layout.fragment_test, container, false);
         viewPager = (ViewPager)root. findViewById(R.id.viewpager);
