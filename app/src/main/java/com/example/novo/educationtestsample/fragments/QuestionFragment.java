@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
+import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +12,8 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +21,9 @@ import android.widget.Button;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
+import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.TextView;
@@ -63,6 +69,8 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
     Button markForReview;
     Question currentQuestion;
     TextView countDownTimer;
+    ImageView menu;
+    PopupMenu popupMenu;
 
 
     public QuestionFragment() {
@@ -111,6 +119,8 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
         questionImage=(ImageView)root.findViewById(R.id.ivQuestion);
         questionText=(TextView)root.findViewById(R.id.tvQuestionText);
         questionMarks=(TextView)root.findViewById(R.id.tvQuestionMarks);
+        menu = (ImageView) root.findViewById(R.id.iv_menu);
+        menu.setOnClickListener(this);
         inflateQuestionData(root);
         flipper = (ViewFlipper) root.findViewById(R.id.flipper);
         animFlipInForeward = AnimationUtils.loadAnimation(getActivity(), R.anim.flipin);
@@ -284,8 +294,34 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
                     questionListJSON.getQuestionList().get(questionListJSON.getCurrentQuestion()).setIsMarkedForReview(true);
                 }
                 break;
+            case R.id.iv_menu:
+                popupMenu = new PopupMenu(getContext(),v);
+                popupMenu.getMenuInflater().inflate(R.menu.custom_menu, popupMenu.getMenu());
+
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.test:
+                                return true;
+
+                            case R.id.forum:
+                                return true;
+
+                            case R.id.results:
+                                return true;
+
+                            default:
+                                break;
+                        }
+                        return true;
+                    }
+                });
+                popupMenu.show();
+                break;
 
         }
+
     }
     public void onSave(){
         questionListJSON.getQuestionList().set(questionListJSON.getCurrentQuestion(), currentQuestion);

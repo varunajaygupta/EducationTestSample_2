@@ -30,5 +30,5 @@
     </string>
     <string name="title_activity_sa">sa</string>
     <string name="startTest">START</string>
-    <string name="noofattemptedquestions">Attempted Questions:</string>
+    <string name="noofattemptedquestions">Attempted Ques:</string>
 </resources>

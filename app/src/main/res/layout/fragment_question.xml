@@ -12,41 +12,48 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/light_grey"
-            android:layout_alignParentTop="true"
-            android:gravity="center"
-            >
-            <TextView
-                android:id="@+id/tv_timer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dummytext"
-                android:layout_alignParentRight="true"
-                android:padding="@dimen/d10"
-                android:textStyle="bold"
-                />
+            android:layout_alignParentTop="true">
+
             <TextView
                 android:id="@+id/tv_attempted_questions"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/noofattemptedquestions"
-                android:paddingTop="@dimen/d10"
-                android:paddingBottom="@dimen/d10"
-                android:paddingLeft="@dimen/d10"
-                android:padding="@dimen/d10"
-                android:textStyle="bold"
-
-                />
+                android:layout_alignParentLeft="true"
+                android:paddingTop="@dimen/d5"
+                android:paddingBottom="@dimen/d5"
+                android:paddingLeft="@dimen/d5"
+                android:padding="@dimen/d5"
+                android:textStyle="bold"/>
             <TextView
                 android:id="@+id/noofattemptedquestions"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/tv_attempted_questions"
                 android:text="1"
-                android:paddingTop="@dimen/d10"
-                android:paddingBottom="@dimen/d10"
-                android:paddingRight="@dimen/d10"
+                android:paddingTop="@dimen/d5"
+                android:paddingBottom="@dimen/d5"
+                android:paddingRight="@dimen/d5"
+                android:textStyle="bold"/>
+            <TextView
+                android:id="@+id/tv_timer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/dummytext"
+                android:layout_toRightOf="@id/noofattemptedquestions"
+                android:layout_marginLeft="@dimen/d10"
+                android:padding="@dimen/d5"
                 android:textStyle="bold"
                 />
+            <ImageView
+                android:id="@+id/iv_menu"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:src="@drawable/menu_dots"
+                android:layout_toRightOf="@id/tv_timer"
+                android:paddingTop="@dimen/d5"
+                android:layout_marginLeft="@dimen/d15"/>
+
         </RelativeLayout>
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvQuestionList"
