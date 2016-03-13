@@ -11,6 +11,15 @@ public class QuestionListJSON implements Cloneable {
     int currentQuestion;
     String testId;
     String testDuration;
+    int noOfQuesAttempted=0;
+
+    public int getNoOfQuesAttempted() {
+        return noOfQuesAttempted;
+    }
+
+    public void setNoOfQuesAttempted(int noOfQuesAttempted) {
+        this.noOfQuesAttempted = noOfQuesAttempted;
+    }
 
     public String getTestId() {
         return testId;

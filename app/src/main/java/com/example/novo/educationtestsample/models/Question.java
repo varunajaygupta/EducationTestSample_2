@@ -24,6 +24,16 @@ public class Question implements  Cloneable
 
     private String answer_key;
 
+    public Boolean getIsAttempted() {
+        return isAttempted;
+    }
+
+    public void setIsAttempted(Boolean isAttempted) {
+        this.isAttempted = isAttempted;
+    }
+
+    private Boolean isAttempted= false;
+
     public Boolean getIsMarkedForReview() {
         return isMarkedForReview;
     }
