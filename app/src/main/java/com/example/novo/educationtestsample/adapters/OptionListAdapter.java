@@ -7,16 +7,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
-import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.example.novo.educationtestsample.R;
 import com.example.novo.educationtestsample.interfaces.ClickListener;
 import com.example.novo.educationtestsample.models.Answer;
-import com.example.novo.educationtestsample.models.NavDrawerItem;
-import com.example.novo.educationtestsample.models.Option;
 import com.example.novo.educationtestsample.models.Question;
+import com.example.novo.educationtestsample.models.QuestionListJSON;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -60,19 +59,19 @@ public class OptionListAdapter extends RecyclerView.Adapter<OptionListAdapter.Op
         holder.optionCheckBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (currentQuestion.getQuestion_type().equalsIgnoreCase("multipleChoice"))
-                {
+                if (currentQuestion.getQuestion_type().equalsIgnoreCase("multipleChoice")) {
                     clickListener.onClick(position);
-                     if (holder.optionCheckBox.isChecked()) {
+                    if (holder.optionCheckBox.isChecked()) {
                         holder.optionCheckBox.setChecked(false);
-                     }
-                     else {
+                        data.get(position).setAnswer_marked(false);
+                    } else {
                         holder.optionCheckBox.setChecked(true);
-                     }
-                }
-                else {
-        // Storing the last checked checkbox and we first make it unchecked and then make the new one checked.
-
+                        data.get(position).setAnswer_marked(true);
+                    }
+                    updateNoOfQuesAttemptedInMultipleChoiceMode(currentQuestion,false);
+                } else {
+                    updateNoOfQuesAttemptedInSingleChoiceMode();
+                    // Storing the last checked checkbox and we first make it unchecked and then make the new one checked.
                     CheckBox checkBox = (CheckBox) v;
                     Integer pos = ((Integer) checkBox.getTag()).intValue();
                     if (checkBox.isChecked()) {
@@ -94,6 +93,40 @@ public class OptionListAdapter extends RecyclerView.Adapter<OptionListAdapter.Op
                 }
             }
         });
+    }
+
+    private void updateNoOfQuesAttemptedInMultipleChoiceMode(Question currentQuestion,Boolean marked) {
+    int noOfQuesAttempted = QuestionListJSON.getInstance().getNoOfQuesAttempted();
+    if(marked && !currentQuestion.getIsAttempted()){
+        QuestionListJSON.getInstance().setNoOfQuesAttempted(noOfQuesAttempted + 1);
+    }else if(!marked){
+        Boolean unMarked=false;
+        for(Answer answer: currentQuestion.getAnswer_array())
+        {
+           if(answer.getAnswer_marked()){
+               unMarked=true;
+           }
+        }
+        if(!unMarked){
+            if (noOfQuesAttempted > 0) {
+                QuestionListJSON.getInstance().setNoOfQuesAttempted(noOfQuesAttempted - 1);
+            }
+        }
+    }
+
+    }
+
+    private void updateNoOfQuesAttemptedInSingleChoiceMode() {
+        int noOfQuesAttempted = QuestionListJSON.getInstance().getNoOfQuesAttempted();
+        if (currentQuestion.getIsAttempted()) {
+            currentQuestion.setIsAttempted(false);
+            if (noOfQuesAttempted > 0) {
+                QuestionListJSON.getInstance().setNoOfQuesAttempted(noOfQuesAttempted - 1);
+            }
+        } else {
+            QuestionListJSON.getInstance().setNoOfQuesAttempted(noOfQuesAttempted + 1);
+        }
+
     }
 
 
