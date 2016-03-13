@@ -8,7 +8,25 @@ import java.util.List;
 public class QuestionListJSON implements Cloneable {
     public static QuestionListJSON mquestionList=null;
     List<Question> questionList;
-    int currentQuestion=0;
+    int currentQuestion;
+    String testId;
+    String testDuration;
+
+    public String getTestId() {
+        return testId;
+    }
+
+    public void setTestId(String testId) {
+        this.testId = testId;
+    }
+
+    public String getTestDuration() {
+        return testDuration;
+    }
+
+    public void setTestDuration(String testDuration) {
+        this.testDuration = testDuration;
+    }
 
     public int getCurrentQuestion() {
         return currentQuestion;

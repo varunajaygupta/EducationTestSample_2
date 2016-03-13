@@ -19,6 +19,7 @@ import com.example.novo.educationtestsample.interfaces.ClickListener;
 import com.example.novo.educationtestsample.interfaces.FragmentInteractionListener;
 import com.example.novo.educationtestsample.interfaces.ResponseCallback;
 import com.example.novo.educationtestsample.models.Question;
+import com.example.novo.educationtestsample.models.QuestionListJSON;
 import com.example.novo.educationtestsample.models.Test;
 import com.example.novo.educationtestsample.models.Test;
 import com.google.gson.Gson;
@@ -38,6 +39,7 @@ public class AvailableTests extends Fragment {
     private TestAdapter testAdapter;
     public static List<Test> testList;
     ProgressDialog progress;
+    QuestionListJSON questionListJSON;
 
 
     public AvailableTests() {
@@ -54,6 +56,7 @@ public class AvailableTests extends Fragment {
         Gson gson= new Gson();
         Type collectionType = new TypeToken<Collection<Test>>(){}.getType();
         testList = gson.fromJson(Utils.loadJSONfromAssests(getContext(), "Quiz.json"), collectionType);
+        questionListJSON=QuestionListJSON.getInstance();
 
 
     }
@@ -98,6 +101,8 @@ public class AvailableTests extends Fragment {
          testAdapter=new TestAdapter(getActivity(),testList, new ClickListener() {
             @Override
             public void onClick(int position) {
+                questionListJSON.setTestDuration(testList.get(position).getDuration_mins());
+                questionListJSON.setTestId(testList.get(position).getTest_id());
                 mListener.replaceFragment(new TestInstructionsFragment(),"Instructions");
             }
 

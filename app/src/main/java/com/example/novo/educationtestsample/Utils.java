@@ -4,6 +4,8 @@ import android.content.Context;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Time;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Varun Ajay Gupta on 10/3/16.
@@ -25,5 +27,8 @@ public class Utils
             e.printStackTrace();
         }
         return json;
+    }
+    public static long changeTimeIntoMilliseconds(int timeInMins){
+    return TimeUnit.MINUTES.toMillis(timeInMins) ;
     }
 }

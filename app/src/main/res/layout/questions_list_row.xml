@@ -7,12 +7,13 @@
     >
 <TextView
     android:id="@+id/tvQuestionNum"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text=""
+    android:layout_width="@dimen/d30"
+    android:layout_height="@dimen/d30"
+    android:text="2"
     android:layout_marginTop="@dimen/d1"
     android:layout_marginBottom="@dimen/d1"
-    android:layout_marginRight="@dimen/d10"
+    android:layout_marginRight="@dimen/d33"
     android:textColor="@color/white"
+    android:gravity="center"
     />
 </RelativeLayout>

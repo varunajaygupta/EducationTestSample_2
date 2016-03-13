@@ -2,7 +2,6 @@ package com.example.novo.educationtestsample.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,28 +10,22 @@ import android.widget.TextView;
 
 import com.example.novo.educationtestsample.R;
 import com.example.novo.educationtestsample.interfaces.ClickListener;
-import com.example.novo.educationtestsample.models.Question;
 import com.example.novo.educationtestsample.models.QuestionListJSON;
-
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Created by Varun Ajay Gupta on 2/3/16.
  */
 public class QuestionListAdapter extends RecyclerView.Adapter<QuestionListAdapter.QuestionViewHolder> {
 
-    public List<Question> questionList= Collections.emptyList();
     private LayoutInflater inflater;
     private Context context;
     private ClickListener clickListener;
     QuestionListJSON questionListJSON=QuestionListJSON.getInstance();
 
 
-    public QuestionListAdapter(Context context, List<Question> data, ClickListener clickListener) {
+    public QuestionListAdapter(Context context, ClickListener clickListener) {
         this.context = context;
         inflater = LayoutInflater.from(context);
-        this.questionList = data;
         this.clickListener=clickListener;
     }
     @Override
@@ -44,13 +37,22 @@ public class QuestionListAdapter extends RecyclerView.Adapter<QuestionListAdapte
 
     @Override
     public void onBindViewHolder(QuestionViewHolder holder, final int position) {
-        holder.questionNumber.setText(String.valueOf(position+1));
-        if (questionListJSON.getQuestionList().get(position).getIsMarkedForReview()){
+        holder.questionNumber.setText(String.valueOf(position + 1));
+        holder.questionNumber.setTextColor(Color.WHITE);
+        holder.questionNumber.setTextSize(15);
+        holder.questionNumber.setBackgroundResource(0);
+        if(questionListJSON.getQuestionList().get(position).getIsMarkedForReview() && questionListJSON.getCurrentQuestion()==(position)){
+            holder.questionNumber.setTextColor(Color.RED);
+            holder.questionNumber.setTextSize(20);
+            holder.questionNumber.setBackgroundResource(R.drawable.background_white);
+        }
+        else if (questionListJSON.getQuestionList().get(position).getIsMarkedForReview()){
             holder.questionNumber.setTextColor(Color.RED);
         }
         else if(questionListJSON.getCurrentQuestion()==(position)){
-            holder.questionNumber.setTextColor(Color.GREEN);
+            holder.questionNumber.setTextColor(Color.BLACK);
             holder.questionNumber.setTextSize(20);
+            holder.questionNumber.setBackgroundResource(R.drawable.background_white);
 
         }
 

@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import com.example.novo.educationtestsample.R;
+import com.example.novo.educationtestsample.Utils;
 import com.example.novo.educationtestsample.activities.MainActivity;
 import com.example.novo.educationtestsample.adapters.OptionListAdapter;
 import com.example.novo.educationtestsample.adapters.QuestionListAdapter;
@@ -36,6 +37,7 @@ import com.example.novo.educationtestsample.models.QuestionListJSON;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 
 public class QuestionFragment extends Fragment implements View.OnClickListener {
@@ -68,11 +70,12 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
         // Required empty public constructor
     }
 
-    public void startCountDownTimer(int time){
+    public void startCountDownTimer(long time){
+
         new CountDownTimer(time, 1000) {
 
             public void onTick(long millisUntilFinished) {
-                countDownTimer.setText("Time left: "+String.valueOf(millisUntilFinished / 1000));
+                countDownTimer.setText("Time left: "+String.valueOf(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))+" mins");
             }
 
             public void onFinish() {
@@ -158,12 +161,12 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
 
         inflateQuestionList(root);
         inflateOptionList(root);
-        startCountDownTimer(20);
+        startCountDownTimer(Utils.changeTimeIntoMilliseconds(Integer.parseInt(questionListJSON.getTestDuration())));
         return root;
     }
 
     private void inflateQuestionData(View root) {
-       // questionImage.setImageDrawable();
+        // questionImage.setImageDrawable();
         questionText.setText(currentQuestion.getQuestion_title());
         questionMarks.setText(String.valueOf(currentQuestion.getQuestion_marks()));
     }
@@ -172,10 +175,10 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
         questionListLinearLayoutManager = new LinearLayoutManager(getActivity());
         questionListLinearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         questionRecyclerView =(RecyclerView)root.findViewById(R.id.rvQuestionList);
-        questionListAdapter=new QuestionListAdapter(getActivity(), questionList, new ClickListener() {
+        questionListAdapter=new QuestionListAdapter(getActivity(),new ClickListener() {
             @Override
             public void onClick(int position) {
-            questionListJSON.setCurrentQuestion(position);
+                questionListJSON.setCurrentQuestion(position);
                 resetData();
             }
 
@@ -190,8 +193,6 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
     }
 
     private void inflateOptionList(View root) {
-        //((MainActivity)getActivity()).drawerFragment.setMenuVisibility(false);
-        ((MainActivity)getActivity()).mToolbar.setVisibility(View.GONE);
         optionRecyclerView =(RecyclerView)root.findViewById(R.id.optionList);
         optionListAdapter=new OptionListAdapter(getActivity(),optionList, new ClickListener() {
             @Override
@@ -209,7 +210,12 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
 
     }
 
-
+    @Override
+    public void onStart() {
+        super.onStart();
+//        ((MainActivity)getActivity()).drawerFragment.setMenuVisibility(false);
+        ((MainActivity)getActivity()).mToolbar.setVisibility(View.GONE);
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -251,12 +257,13 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
     void resetData(){
         try {
             currentQuestion= (Question) questionList.get(questionListJSON.getCurrentQuestion()).clone();
-        // questionImage.setImageDrawable();
-        questionText.setText(currentQuestion.getQuestion_title());
-        questionMarks.setText(String.valueOf(currentQuestion.getQuestion_marks()));
-        optionListAdapter.data=currentQuestion.getAnswer_array();
-        optionListAdapter.notifyDataSetChanged();
-        questionListAdapter.notifyDataSetChanged();
+            // questionImage.setImageDrawable();
+            questionText.setText(currentQuestion.getQuestion_title());
+            questionMarks.setText(String.valueOf(currentQuestion.getQuestion_marks()));
+            optionListAdapter.data=currentQuestion.getAnswer_array();
+            optionListAdapter.notifyDataSetChanged();
+            questionListAdapter.notifyDataSetChanged();
+            questionRecyclerView.smoothScrollToPosition(questionListJSON.getCurrentQuestion());
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }
@@ -267,18 +274,26 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_mark_for_review:
-                 if(questionListJSON.getQuestionList().get(questionListJSON.getCurrentQuestion()).getIsMarkedForReview()){
-                     questionListJSON.getQuestionList().get(questionListJSON.getCurrentQuestion()).setIsMarkedForReview(false);
-                     Toast.makeText(getActivity(),"UnMarked for review",Toast.LENGTH_SHORT).show();
-                 }else {
-                     Toast.makeText(getActivity(),"Marked for review",Toast.LENGTH_SHORT).show();
-                     questionListJSON.getQuestionList().get(questionListJSON.getCurrentQuestion()).setIsMarkedForReview(true);
-                 }
-            break;
+                if(questionListJSON.getQuestionList().get(questionListJSON.getCurrentQuestion()).getIsMarkedForReview()){
+                    questionListJSON.getQuestionList().get(questionListJSON.getCurrentQuestion()).setIsMarkedForReview(false);
+                    Toast.makeText(getActivity(),"UnMarked for review",Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(getActivity(),"Marked for review",Toast.LENGTH_SHORT).show();
+                    questionListJSON.getQuestionList().get(questionListJSON.getCurrentQuestion()).setIsMarkedForReview(true);
+                }
+                break;
 
         }
     }
     public void onSave(){
         questionListJSON.getQuestionList().set(questionListJSON.getCurrentQuestion(),currentQuestion);
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        //((MainActivity)getActivity()).drawerFragment.setMenuVisibility(true);
+        ((MainActivity)getActivity()).mToolbar.setVisibility(View.VISIBLE);
+    }
+
 }
