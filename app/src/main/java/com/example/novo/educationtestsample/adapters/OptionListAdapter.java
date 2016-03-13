@@ -15,6 +15,7 @@ import com.example.novo.educationtestsample.interfaces.ClickListener;
 import com.example.novo.educationtestsample.models.Answer;
 import com.example.novo.educationtestsample.models.NavDrawerItem;
 import com.example.novo.educationtestsample.models.Option;
+import com.example.novo.educationtestsample.models.Question;
 
 import java.util.Collections;
 import java.util.List;
@@ -27,39 +28,69 @@ public class OptionListAdapter extends RecyclerView.Adapter<OptionListAdapter.Op
     private LayoutInflater inflater;
     private Context context;
     private ClickListener clickListener;
-    CheckBox checkBox;
+    private Question currentQuestion;
+    private static CheckBox lastCheckedCheckBox = null;
+    private static int lastCheckedPos = 0;
 
 
-    public OptionListAdapter(Context context, List<Answer> data, ClickListener clickListener) {
+    public OptionListAdapter(Context context, Question currentQuestion, ClickListener clickListener) {
         this.context = context;
         inflater = LayoutInflater.from(context);
-        this.data = data;
-        this.clickListener=clickListener;
+        this.currentQuestion = currentQuestion;
+        this.clickListener = clickListener;
+        this.data = this.currentQuestion.getAnswer_array();
     }
 
 
     @Override
     public OptionViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view= inflater.inflate(R.layout.option_layout,parent,false);
-        OptionViewHolder optionViewHolder= new OptionViewHolder(view);
+        View view = inflater.inflate(R.layout.option_layout, parent, false);
+        OptionViewHolder optionViewHolder = new OptionViewHolder(view);
         return optionViewHolder;
     }
 
     @Override
-    public void onBindViewHolder(OptionViewHolder holder, final int position) {
-        holder.optionNumber.setText(String.valueOf(position+1+"."));
+    public void onBindViewHolder(final OptionViewHolder holder, final int position) {
+        holder.optionNumber.setText(String.valueOf(position + 1 + "."));
         holder.optionText.setText(data.get(position).getAnswer_title());
-        //holder.optionImage.setIm(data.get(position).getAnswer_title());
+        //holder.optionImage.setImg(data.get(position).getAnswer_title());
         holder.optionCheckBox.setChecked(data.get(position).getAnswer_marked());
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
+        holder.optionCheckBox.setTag(new Integer(position));
+
+        holder.optionCheckBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                clickListener.onClick(position);
-                checkBox = (CheckBox) v.findViewById(R.id.chOption);
-                if(checkBox.isChecked()){
-                    checkBox.setChecked(false);
-                }else{
-                    checkBox.setChecked(true);
+                if (currentQuestion.getQuestion_type().equalsIgnoreCase("multipleChoice"))
+                {
+                    clickListener.onClick(position);
+                     if (holder.optionCheckBox.isChecked()) {
+                        holder.optionCheckBox.setChecked(false);
+                     }
+                     else {
+                        holder.optionCheckBox.setChecked(true);
+                     }
+                }
+                else {
+        // Storing the last checked checkbox and we first make it unchecked and then make the new one checked.
+
+                    CheckBox checkBox = (CheckBox) v;
+                    Integer pos = ((Integer) checkBox.getTag()).intValue();
+                    if (checkBox.isChecked()) {
+                        if (lastCheckedCheckBox != null) {
+                            lastCheckedCheckBox.setChecked(false);
+                            data.get(lastCheckedPos).setAnswer_marked(false);
+                        }
+                        //((CheckBox) v).setChecked(true);
+                        data.get(position).setAnswer_marked(true);
+                        lastCheckedCheckBox = checkBox;
+                        lastCheckedPos = pos;
+
+                    } else {
+                        lastCheckedCheckBox = null;
+                        lastCheckedPos = 0;
+                        data.get(position).setAnswer_marked(false);
+                    }
+
                 }
             }
         });
@@ -71,7 +102,7 @@ public class OptionListAdapter extends RecyclerView.Adapter<OptionListAdapter.Op
         return data.size();
     }
 
-    public class OptionViewHolder extends RecyclerView.ViewHolder{
+    public class OptionViewHolder extends RecyclerView.ViewHolder {
 
         TextView optionText;
         TextView optionNumber;
@@ -80,10 +111,10 @@ public class OptionListAdapter extends RecyclerView.Adapter<OptionListAdapter.Op
 
         public OptionViewHolder(View itemView) {
             super(itemView);
-            optionText=(TextView)itemView.findViewById(R.id.tvOptionText);
-            optionNumber=(TextView)itemView.findViewById(R.id.tvOptionNum);
-            optionImage=(ImageView)itemView.findViewById(R.id.ivOption);
-            optionCheckBox=(CheckBox)itemView.findViewById(R.id.chOption);
+            optionText = (TextView) itemView.findViewById(R.id.tvOptionText);
+            optionNumber = (TextView) itemView.findViewById(R.id.tvOptionNum);
+            optionImage = (ImageView) itemView.findViewById(R.id.ivOption);
+            optionCheckBox = (CheckBox) itemView.findViewById(R.id.chOption);
         }
     }
 }

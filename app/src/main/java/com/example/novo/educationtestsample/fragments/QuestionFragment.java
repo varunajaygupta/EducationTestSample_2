@@ -55,7 +55,6 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
     List<Answer> optionList;
     List<Question> questionList;
     LinearLayoutManager questionListLinearLayoutManager;
-    private ClickListener clickListener;
     Animation animFlipInForeward;
     Animation animFlipOutForeward;
     Animation animFlipInBackward;
@@ -178,6 +177,7 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
         questionListAdapter=new QuestionListAdapter(getActivity(),new ClickListener() {
             @Override
             public void onClick(int position) {
+                onSave();
                 questionListJSON.setCurrentQuestion(position);
                 resetData();
             }
@@ -194,7 +194,7 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
 
     private void inflateOptionList(View root) {
         optionRecyclerView =(RecyclerView)root.findViewById(R.id.optionList);
-        optionListAdapter=new OptionListAdapter(getActivity(),optionList, new ClickListener() {
+        optionListAdapter=new OptionListAdapter(getActivity(),currentQuestion, new ClickListener() {
             @Override
             public void onClick(int position) {
 
@@ -236,23 +236,25 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
 
 
     private void SwipeRight(){
+        onSave();
         if(questionListJSON.getCurrentQuestion()>0) {
             questionListJSON.setCurrentQuestion(questionListJSON.getCurrentQuestion() - 1);
             resetData();
+            flipper.setInAnimation(animFlipInBackward);
+            flipper.setOutAnimation(animFlipOutBackward);
+            flipper.showPrevious();
         }
-        flipper.setInAnimation(animFlipInBackward);
-        flipper.setOutAnimation(animFlipOutBackward);
-        flipper.showPrevious();
     }
 
     private void SwipeLeft(){
+        onSave();
         if(questionListJSON.getCurrentQuestion()+1< questionListJSON.getQuestionList().size()) {
             questionListJSON.setCurrentQuestion(questionListJSON.getCurrentQuestion() + 1);
             resetData();
+            flipper.setInAnimation(animFlipInForeward);
+            flipper.setOutAnimation(animFlipOutForeward);
+            flipper.showNext();
         }
-        flipper.setInAnimation(animFlipInForeward);
-        flipper.setOutAnimation(animFlipOutForeward);
-        flipper.showNext();
     }
     void resetData(){
         try {
@@ -286,7 +288,7 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
         }
     }
     public void onSave(){
-        questionListJSON.getQuestionList().set(questionListJSON.getCurrentQuestion(),currentQuestion);
+        questionListJSON.getQuestionList().set(questionListJSON.getCurrentQuestion(), currentQuestion);
     }
 
     @Override
