@@ -1,5 +1,6 @@
 package com.example.novo.educationtestsample.models;
 
+import android.widget.CheckBox;
 import android.widget.RadioButton;
 
 import java.io.Serializable;
@@ -24,6 +25,18 @@ public class Question implements  Cloneable
 
     private String answer_key;
 
+    private int lastCheckedCheckboxPos= -1;
+
+    private Boolean isAttempted= false;
+
+    public int getLastCheckedCheckboxPos() {
+        return lastCheckedCheckboxPos;
+    }
+
+    public void setLastCheckedCheckboxPos(int lastCheckedCheckboxPos) {
+        this.lastCheckedCheckboxPos = lastCheckedCheckboxPos;
+    }
+
     public Boolean getIsAttempted() {
         return isAttempted;
     }
@@ -31,8 +44,6 @@ public class Question implements  Cloneable
     public void setIsAttempted(Boolean isAttempted) {
         this.isAttempted = isAttempted;
     }
-
-    private Boolean isAttempted= false;
 
     public Boolean getIsMarkedForReview() {
         return isMarkedForReview;

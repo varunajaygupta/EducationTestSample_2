@@ -1,6 +1,12 @@
 package com.example.novo.educationtestsample;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+import android.support.v4.app.NotificationCompat;
+
+import com.example.novo.educationtestsample.activities.MainActivity;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,5 +36,26 @@ public class Utils
     }
     public static long changeTimeIntoMilliseconds(int timeInMins){
     return TimeUnit.MINUTES.toMillis(timeInMins) ;
+    }
+
+    public static void showNotification(Context context,String title,String text){
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(context)
+                        .setSmallIcon(R.drawable.appicon)
+                        .setContentTitle(title)
+                        .setContentText(text);
+        Intent resultIntent = new Intent(context, MainActivity.class);
+
+        PendingIntent resultPendingIntent = PendingIntent.getActivity(
+                context,
+                0,
+                resultIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+        );
+        mBuilder.setContentIntent(resultPendingIntent);
+        int mNotificationId = 001;
+        NotificationManager mNotifyMgr = (NotificationManager)context. getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotifyMgr.notify(mNotificationId, mBuilder.build());
+
     }
 }

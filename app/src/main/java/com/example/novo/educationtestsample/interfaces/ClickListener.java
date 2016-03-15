@@ -9,5 +9,5 @@ public interface ClickListener {
 
   void onClick(int position);
   void onLongClick(int position);
-
+  void onNoOfAttemptedQuesChanged(int noOfAttemptedQuesChanged);
 }

@@ -10,12 +10,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.novo.educationtestsample.R;
+import com.example.novo.educationtestsample.fragments.QuestionFragment;
 import com.example.novo.educationtestsample.interfaces.ClickListener;
 import com.example.novo.educationtestsample.models.Answer;
 import com.example.novo.educationtestsample.models.Question;
 import com.example.novo.educationtestsample.models.QuestionListJSON;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -27,17 +27,17 @@ public class OptionListAdapter extends RecyclerView.Adapter<OptionListAdapter.Op
     private LayoutInflater inflater;
     private Context context;
     private ClickListener clickListener;
-    private Question currentQuestion;
-    private static CheckBox lastCheckedCheckBox = null;
-    private static int lastCheckedPos = 0;
+    public Question currentQuestion;
+    public QuestionFragment fragment;
 
 
-    public OptionListAdapter(Context context, Question currentQuestion, ClickListener clickListener) {
+    public OptionListAdapter(Context context, Question currentQuestion, ClickListener clickListener,QuestionFragment fragment) {
         this.context = context;
         inflater = LayoutInflater.from(context);
         this.currentQuestion = currentQuestion;
         this.clickListener = clickListener;
         this.data = this.currentQuestion.getAnswer_array();
+        this.fragment=fragment;
     }
 
 
@@ -45,6 +45,7 @@ public class OptionListAdapter extends RecyclerView.Adapter<OptionListAdapter.Op
     public OptionViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = inflater.inflate(R.layout.option_layout, parent, false);
         OptionViewHolder optionViewHolder = new OptionViewHolder(view);
+        fragment.handlingSwipe(view);
         return optionViewHolder;
     }
 
@@ -70,26 +71,28 @@ public class OptionListAdapter extends RecyclerView.Adapter<OptionListAdapter.Op
                     }
                     updateNoOfQuesAttemptedInMultipleChoiceMode(currentQuestion,false);
                 } else {
-                    updateNoOfQuesAttemptedInSingleChoiceMode();
+
                     // Storing the last checked checkbox and we first make it unchecked and then make the new one checked.
-                    CheckBox checkBox = (CheckBox) v;
+                    CheckBox checkBox = ((CheckBox) v);
                     Integer pos = ((Integer) checkBox.getTag()).intValue();
                     if (checkBox.isChecked()) {
-                        if (lastCheckedCheckBox != null) {
-                            lastCheckedCheckBox.setChecked(false);
-                            data.get(lastCheckedPos).setAnswer_marked(false);
+                        if (currentQuestion.getLastCheckedCheckboxPos() != -1) {
+                            data.get(currentQuestion.getLastCheckedCheckboxPos()).setAnswer_marked(false);
                         }
-                        //((CheckBox) v).setChecked(true);
                         data.get(position).setAnswer_marked(true);
-                        lastCheckedCheckBox = checkBox;
-                        lastCheckedPos = pos;
+                        currentQuestion.setLastCheckedCheckboxPos(pos);
+                        if(!currentQuestion.getIsAttempted()) {
+                            currentQuestion.setIsAttempted(true);
+                        updateNoOfQuesAttemptedInSingleChoiceMode();
+                        }
 
                     } else {
-                        lastCheckedCheckBox = null;
-                        lastCheckedPos = 0;
+                        currentQuestion.setLastCheckedCheckboxPos(0);
                         data.get(position).setAnswer_marked(false);
+                        currentQuestion.setIsAttempted(false);
+                        updateNoOfQuesAttemptedInSingleChoiceMode();
                     }
-
+                    notifyDataSetChanged();
                 }
             }
         });
@@ -112,21 +115,21 @@ public class OptionListAdapter extends RecyclerView.Adapter<OptionListAdapter.Op
                 QuestionListJSON.getInstance().setNoOfQuesAttempted(noOfQuesAttempted - 1);
             }
         }
+        clickListener.onNoOfAttemptedQuesChanged(QuestionListJSON.getInstance().getNoOfQuesAttempted());
     }
 
     }
 
     private void updateNoOfQuesAttemptedInSingleChoiceMode() {
         int noOfQuesAttempted = QuestionListJSON.getInstance().getNoOfQuesAttempted();
-        if (currentQuestion.getIsAttempted()) {
-            currentQuestion.setIsAttempted(false);
+        if (!currentQuestion.getIsAttempted()) {
             if (noOfQuesAttempted > 0) {
                 QuestionListJSON.getInstance().setNoOfQuesAttempted(noOfQuesAttempted - 1);
             }
         } else {
             QuestionListJSON.getInstance().setNoOfQuesAttempted(noOfQuesAttempted + 1);
         }
-
+        clickListener.onNoOfAttemptedQuesChanged(QuestionListJSON.getInstance().getNoOfQuesAttempted());
     }
 
 

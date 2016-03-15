@@ -110,6 +110,11 @@ public class AvailableTests extends Fragment {
             public void onLongClick(int position) {
 
             }
+
+             @Override
+             public void onNoOfAttemptedQuesChanged(int noOfAttemptedQuesChanged) {
+
+             }
          });
         recyclerView.setAdapter(testAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

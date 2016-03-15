@@ -71,6 +71,7 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
     TextView countDownTimer;
     ImageView menu;
     PopupMenu popupMenu;
+    TextView noOfQuesAttempted;
 
 
     public QuestionFragment() {
@@ -121,12 +122,28 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
         questionMarks=(TextView)root.findViewById(R.id.tvQuestionMarks);
         menu = (ImageView) root.findViewById(R.id.iv_menu);
         menu.setOnClickListener(this);
+        noOfQuesAttempted=(TextView)root.findViewById(R.id.noofattemptedquestions);
         inflateQuestionData(root);
         flipper = (ViewFlipper) root.findViewById(R.id.flipper);
         animFlipInForeward = AnimationUtils.loadAnimation(getActivity(), R.anim.flipin);
         animFlipOutForeward = AnimationUtils.loadAnimation(getActivity(), R.anim.flipout);
         animFlipInBackward = AnimationUtils.loadAnimation(getActivity(), R.anim.flipin_reverse);
         animFlipOutBackward = AnimationUtils.loadAnimation(getActivity(), R.anim.flipout_reverse);
+        handlingSwipe(root);
+
+        inflateQuestionList(root);
+        inflateOptionList(root);
+        startCountDownTimer(Utils.changeTimeIntoMilliseconds(Integer.parseInt(questionListJSON.getTestDuration())));
+        countDownTimer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.showNotification(getActivity(),"Take Test","New math test uploaded");
+            }
+        });
+        return root;
+    }
+
+    public void handlingSwipe(View view) {
         final GestureDetector gesture = new GestureDetector(getActivity(),
                 new GestureDetector.SimpleOnGestureListener() {
 
@@ -161,23 +178,19 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
                     }
                 });
 
-        root.setOnTouchListener(new View.OnTouchListener() {
+        view.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 return gesture.onTouchEvent(event);
             }
         });
-
-        inflateQuestionList(root);
-        inflateOptionList(root);
-        startCountDownTimer(Utils.changeTimeIntoMilliseconds(Integer.parseInt(questionListJSON.getTestDuration())));
-        return root;
     }
 
     private void inflateQuestionData(View root) {
         // questionImage.setImageDrawable();
         questionText.setText(currentQuestion.getQuestion_title());
         questionMarks.setText(String.valueOf(currentQuestion.getQuestion_marks()));
+        noOfQuesAttempted.setText(String.valueOf(questionListJSON.getNoOfQuesAttempted()));
     }
 
     private void inflateQuestionList(View root) {
@@ -194,6 +207,11 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
 
             @Override
             public void onLongClick(int position) {
+
+            }
+
+            @Override
+            public void onNoOfAttemptedQuesChanged(int noOfAttemptedQuesChanged) {
 
             }
         });
@@ -214,7 +232,12 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
             public void onLongClick(int position) {
 
             }
-        });
+
+            @Override
+            public void onNoOfAttemptedQuesChanged(int noOfAttemptedQuesChanged) {
+            noOfQuesAttempted.setText(String.valueOf(noOfAttemptedQuesChanged));
+            }
+        },QuestionFragment.this);
         optionRecyclerView.setAdapter(optionListAdapter);
         optionRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -270,8 +293,10 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
         try {
             currentQuestion= (Question) questionList.get(questionListJSON.getCurrentQuestion()).clone();
             // questionImage.setImageDrawable();
+            noOfQuesAttempted.setText(String.valueOf(questionListJSON.getNoOfQuesAttempted()));
             questionText.setText(currentQuestion.getQuestion_title());
             questionMarks.setText(String.valueOf(currentQuestion.getQuestion_marks()));
+            optionListAdapter.currentQuestion=currentQuestion;
             optionListAdapter.data=currentQuestion.getAnswer_array();
             optionListAdapter.notifyDataSetChanged();
             questionListAdapter.notifyDataSetChanged();
@@ -288,10 +313,12 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
             case R.id.btn_mark_for_review:
                 if(questionListJSON.getQuestionList().get(questionListJSON.getCurrentQuestion()).getIsMarkedForReview()){
                     questionListJSON.getQuestionList().get(questionListJSON.getCurrentQuestion()).setIsMarkedForReview(false);
+                    currentQuestion.setIsMarkedForReview(false);
                     Toast.makeText(getActivity(),"UnMarked for review",Toast.LENGTH_SHORT).show();
                 }else {
                     Toast.makeText(getActivity(),"Marked for review",Toast.LENGTH_SHORT).show();
                     questionListJSON.getQuestionList().get(questionListJSON.getCurrentQuestion()).setIsMarkedForReview(true);
+                    currentQuestion.setIsMarkedForReview(true);
                 }
                 break;
             case R.id.iv_menu:

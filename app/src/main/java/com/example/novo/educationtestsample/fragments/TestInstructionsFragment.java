@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.example.novo.educationtestsample.ParsingAsyncTask;
 import com.example.novo.educationtestsample.R;
 import com.example.novo.educationtestsample.Utils;
 import com.example.novo.educationtestsample.interfaces.FragmentInteractionListener;
@@ -93,7 +94,7 @@ public class TestInstructionsFragment extends Fragment implements View.OnClickLi
         Type collectionType = new TypeToken<Collection<Question>>(){}.getType();
         Collection<Question> questionList = gson.fromJson(Utils.loadJSONfromAssests(getActivity(), "dummyJSON.json"), collectionType);
         QuestionListJSON.getInstance().setQuestionList((List)questionList);
-        Log.e("JSON",questionList.toString());
+        Log.e("TAG",((List) questionList).get(0).toString());
         mListener.replaceFragment(new QuestionFragment(),"Question");
 
     }

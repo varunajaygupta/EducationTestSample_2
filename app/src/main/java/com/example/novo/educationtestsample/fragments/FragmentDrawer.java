@@ -77,6 +77,11 @@ public class FragmentDrawer extends Fragment {
             public void onLongClick(int position) {
 
             }
+
+            @Override
+            public void onNoOfAttemptedQuesChanged(int noOfAttemptedQuesChanged) {
+
+            }
         });
 
         recyclerView.setAdapter(adapter);

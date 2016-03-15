@@ -12,7 +12,8 @@
     android:text="2"
     android:layout_marginTop="@dimen/d1"
     android:layout_marginBottom="@dimen/d1"
-    android:layout_marginRight="@dimen/d33"
+    android:layout_marginRight="@dimen/d17"
+    android:layout_marginLeft="@dimen/d17"
     android:textColor="@color/white"
     android:gravity="center"
     />
