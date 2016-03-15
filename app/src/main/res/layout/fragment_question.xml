@@ -86,15 +86,18 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:padding="@dimen/d5"
+                        >
                         <ImageView
                             android:id="@+id/ivQuestion"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@color/white"
                             android:src="@drawable/dummyquestion"
-                            android:layout_alignParentTop="true"
-                            android:visibility="gone" />
+                            android:visibility="gone"
+                            android:layout_below="@+id/tvQuestionMarks"
+                            />
                         <TextView
                             android:id="@+id/tvQuestionText"
                             android:layout_width="match_parent"
@@ -102,25 +105,38 @@
                             android:text="@string/questiondummytext"
                             android:textSize="@dimen/s18"
                             android:paddingLeft="@dimen/d5"
-                            android:layout_below="@+id/ivQuestion"></TextView>
+                            android:layout_below="@+id/ivQuestion"
+                            ></TextView>
                         <TextView
                             android:id="@+id/tvQuestionMarks"
                             android:layout_width="@dimen/d25"
                             android:layout_height="@dimen/d25"
-                            android:layout_below="@+id/tvQuestionText"
                             android:text="1"
                             android:background="@drawable/textviewcircularbackground"
                             android:gravity="center"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentTop="true"
                             android:padding="@dimen/d3"/>
+
+                        <TextView
+                            android:id="@+id/tvQuestype"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:text="Single Choice"
+                            />
                         <Button
                             android:id="@+id/btn_mark_for_review"
                             android:layout_width="@dimen/d19"
                             android:layout_height="@dimen/d19"
                             android:layout_gravity="bottom|end"
-                            android:layout_margin="@dimen/d3"
-                            android:layout_below="@+id/tvQuestionText"
+                            android:layout_marginTop="@dimen/d3"
                             android:layout_alignParentRight="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignBaseline="@+id/tvQuestionMarks"
                             android:src="@android:drawable/ic_dialog_email" />
+
+
                     </RelativeLayout>
                 </android.support.v7.widget.CardView>
                 <android.support.v7.widget.RecyclerView
