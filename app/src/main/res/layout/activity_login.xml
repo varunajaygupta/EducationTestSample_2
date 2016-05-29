@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_loginParent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:gravity="center">
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:id="@+id/rlloginBody"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/bmwLoginHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
+                android:gravity="center"
+                android:maxLines="3"
+                android:text="@string/productName"
+                android:textSize="40sp"
+                android:textColor="@color/colorAccent"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/bmwLoginHeader"
+                android:layout_centerInParent="true"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="@dimen/d48"
+                android:padding="@dimen/d5"
+                android:gravity="center"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tvInvalidCredentials"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/invalid_credentials"
+                    android:visibility="gone"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/s16"
+                    />
+                <EditText
+                    android:id="@+id/etLoginUsername"
+                    android:hint="Username"
+                    android:drawableLeft="@drawable/ic_bmw_user2"
+                    style="@style/EditTextLogin" />
+                <TextView
+                    android:id="@+id/tvEmptyUsername"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/enter_username"
+                    android:visibility="gone"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/s16"
+                    />
+                <EditText
+                    android:id="@+id/etLoginPassword"
+                    android:layout_below="@+id/etLoginUsername"
+                    android:hint="Password"
+                    style="@style/EditTextLogin"
+                    android:drawableLeft="@drawable/ic_bmw_key2"
+                    android:inputType="textPassword"
+                     />
+                <TextView
+                    android:id="@+id/tvEmptyPassword"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/enter_password"
+                    android:visibility="gone"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/s16"
+                    />
+
+                <CheckBox
+                    android:id="@+id/cbKeepMeSignedIn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/keep_me_signed_in"
+                    android:fontFamily="sans-serif-condensed"
+                    android:layout_marginTop="@dimen/d5"
+                    />
+                <Button
+                    android:id="@+id/btnLogin"
+                    android:layout_below="@+id/cbKeepMeSignedIn"
+                    android:layout_marginTop="@dimen/d33"
+                    android:text="LOGIN"
+                    style="@style/ButtonLogin" />
+
+                <TextView
+                    android:id="@+id/tvForgotPassword"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/forgot_password"
+                    android:padding="@dimen/d20"
+                    android:fontFamily="sans-serif-condensed"
+                    />
+            </LinearLayout>
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>
