@@ -11,16 +11,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.novo.educationtestsample.MyAsyncTask;
 import com.example.novo.educationtestsample.R;
-import com.example.novo.educationtestsample.Utils;
+import com.example.novo.educationtestsample.Utils.Utils;
 import com.example.novo.educationtestsample.adapters.TestAdapter;
 import com.example.novo.educationtestsample.interfaces.ClickListener;
 import com.example.novo.educationtestsample.interfaces.FragmentInteractionListener;
-import com.example.novo.educationtestsample.interfaces.ResponseCallback;
-import com.example.novo.educationtestsample.models.Question;
 import com.example.novo.educationtestsample.models.QuestionListJSON;
-import com.example.novo.educationtestsample.models.Test;
 import com.example.novo.educationtestsample.models.Test;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

@@ -6,9 +6,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by anubhav on 23/2/16.
- */
+
 public class Test
 {
     private String id;

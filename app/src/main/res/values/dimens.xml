@@ -32,8 +32,7 @@
     <dimen name="d33">33dp</dimen>
     <dimen name="d35">35dp</dimen>
     <dimen name="d100">100dp</dimen>
-    <!-- Dimension for all Buttons -->
-    <dimen name="dimen_horizontal_width">48dp</dimen>
+    <dimen name="d48">48dp</dimen>
 
     <!--           dimens -->
 
@@ -58,5 +57,34 @@
     <dimen name="s18">18sp</dimen>
     <dimen name="s19">19sp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+
+    <!--=============================================-->
+
+    <!--LoginRequest button -->
+    <dimen name="btn_64dp_padding">64dp</dimen>
+    <dimen name="btn_16dp_padding">16dp</dimen>
+    <dimen name="btn_32sp_text_size">32sp</dimen>
+
+    <!--Edit text LoginRequest-->
+    <dimen name="et_drawable_padding">16dp</dimen>
+    <dimen name="et_padding">20dp</dimen>
+    <dimen name="et_text_size">24sp</dimen>
+
+    <!--Menu Activity-->
+    <dimen name="btn_padding_menuactivity">16dp</dimen>
+    <dimen name="img_height_menuactivity">64dp</dimen>
+
+    <!--AddBag Activity-->
+    <dimen name="addbag_top_text">75dp</dimen>
+    <dimen name="text_size_addbag">24sp</dimen>
+    <dimen name="btn_addbag_padding">18dp</dimen>
+    <dimen name="card_text_size">20sp</dimen>
+
+    <!--BagDetails Activity-->
+    <dimen name="textvalues_padding_bagdetails">60dp</dimen>
+    <dimen name="ic_back_40dp">40dp</dimen>
+
+    <!-- Dimensions for text size-->
+    <dimen name="s25">25sp</dimen>
 
 </resources>

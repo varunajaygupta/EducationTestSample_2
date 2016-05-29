@@ -29,6 +29,40 @@
     </style>
 
     <style name="MyMaterialTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="EditTextDefault">
+        <item name="android:textColor">@color/et_color</item>
+        <item name="android:textColorHint">@color/et_hint_color</item>
+    </style>
+
+    <style name="ButtonDefault">
+        <item name="android:textColor">@color/btn_color</item>
+    </style>
+
+    <style name="TextViewDefault">
+        <item name="android:textColor">@color/tv_color</item>
+    </style>
 
     <style name="MyMaterialTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="EditTextLogin" parent="EditTextDefault">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:drawablePadding">@dimen/et_drawable_padding</item>
+        <item name="android:ems">10</item>
+        <item name="android:padding">@dimen/et_padding</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textSize">@dimen/et_text_size</item>
+    </style>
+
+    <style name="ButtonLogin" parent="ButtonDefault">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@color/colorAccent</item>
+        <item name="android:paddingLeft">@dimen/btn_64dp_padding</item>
+        <item name="android:paddingRight">@dimen/btn_64dp_padding</item>
+        <item name="android:paddingTop">@dimen/btn_16dp_padding</item>
+        <item name="android:paddingBottom">@dimen/btn_16dp_padding</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">@dimen/btn_32sp_text_size</item>
+    </style>
+
 </resources>

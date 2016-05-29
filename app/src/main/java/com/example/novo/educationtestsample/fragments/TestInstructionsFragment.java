@@ -9,17 +9,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.example.novo.educationtestsample.ParsingAsyncTask;
 import com.example.novo.educationtestsample.R;
-import com.example.novo.educationtestsample.Utils;
+import com.example.novo.educationtestsample.Utils.Utils;
 import com.example.novo.educationtestsample.interfaces.FragmentInteractionListener;
 import com.example.novo.educationtestsample.models.Question;
 import com.example.novo.educationtestsample.models.QuestionListJSON;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.List;

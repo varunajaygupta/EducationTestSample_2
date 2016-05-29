@@ -4,15 +4,12 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
-import android.support.v7.view.menu.MenuBuilder;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.util.Log;
 import android.view.GestureDetector;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,22 +19,18 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
-import android.widget.RadioButton;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import com.example.novo.educationtestsample.R;
-import com.example.novo.educationtestsample.Utils;
+import com.example.novo.educationtestsample.Utils.Utils;
 import com.example.novo.educationtestsample.activities.MainActivity;
 import com.example.novo.educationtestsample.adapters.OptionListAdapter;
 import com.example.novo.educationtestsample.adapters.QuestionListAdapter;
 import com.example.novo.educationtestsample.interfaces.ClickListener;
 import com.example.novo.educationtestsample.interfaces.FragmentInteractionListener;
 import com.example.novo.educationtestsample.models.Answer;
-import com.example.novo.educationtestsample.models.Option;
 import com.example.novo.educationtestsample.models.Question;
 import com.example.novo.educationtestsample.models.QuestionListJSON;
 
@@ -188,7 +181,9 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
 
     private void inflateQuestionData(View root) {
         // questionImage.setImageDrawable();
-        questionText.setText(currentQuestion.getQuestion_title());
+
+
+        questionText.setText(Html.fromHtml(currentQuestion.getQuestion_title()));
         questionMarks.setText(String.valueOf(currentQuestion.getQuestion_marks()));
         noOfQuesAttempted.setText(String.valueOf(questionListJSON.getNoOfQuesAttempted()));
     }

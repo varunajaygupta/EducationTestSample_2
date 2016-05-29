@@ -44,5 +44,33 @@
     <dimen name="d33">33dp</dimen>
     <dimen name="d35">35dp</dimen>
     <dimen name="d100">100dp</dimen>
+    <dimen name="d48">48dp</dimen>
+    <!--BMW Dimens-->
+    <!--=============================================-->
+
+    <!--LoginRequest button padding-->
+    <dimen name="btn_64dp_padding">128dp</dimen>
+    <dimen name="btn_16dp_padding">24dp</dimen>
+    <dimen name="btn_32sp_text_size">40sp</dimen>
+
+    <!--Edit text LoginRequest-->
+    <dimen name="et_drawable_padding">24dp</dimen>
+    <dimen name="et_padding">28dp</dimen>
+    <dimen name="et_text_size">32sp</dimen>
+
+    <!--Menu Activity-->
+    <dimen name="btn_padding_menuactivity">48dp</dimen>
+    <dimen name="img_height_menuactivity">88dp</dimen>
+
+    <!--AddBag Activity-->
+    <dimen name="addbag_top_text">85dp</dimen>
+    <dimen name="text_size_addbag">32sp</dimen>
+    <dimen name="btn_addbag_padding">28dp</dimen>
+    <dimen name="card_text_size">30sp</dimen>
+
+    <!--BagDetails Activity-->
+    <dimen name="textvalues_padding_bagdetails">90dp</dimen>
+    <dimen name="ic_back_40dp">60dp</dimen>
+
 
 </resources>
