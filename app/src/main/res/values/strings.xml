@@ -51,5 +51,8 @@
     <string name="enter_username">Please enter your username</string>
     <string name="enter_password">Please enter your password</string>
     <string name="invalid_credentials">Invalid credentials</string>
-    <string name="invalid_login">Invalid LoginID</string>
+    <string name="invalid_login">{\"response\":\"Invalid LoginID\"}</string>
+    <string name="first_time_login">First time login</string>
+    <string name="OK">OK</string>
+    <string name="first_time_login_message">Welcome to Study Solo. Please do your first login from our web portal.</string>
 </resources>

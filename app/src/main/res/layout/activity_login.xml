@@ -44,7 +44,7 @@
                     android:text="@string/invalid_credentials"
                     android:visibility="gone"
                     android:textColor="@color/red"
-                    android:textSize="@dimen/s16"
+                    android:textSize="@dimen/s19"
                     />
                 <EditText
                     android:id="@+id/etLoginUsername"
