@@ -15,14 +15,14 @@ import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class MyAsyncTask extends AsyncTask<String, String, String> {
+public class PostHitAsyncTask extends AsyncTask<String, String, String> {
 
     private ResponseCallback callback;
     private String url;
     private String requestJson;
-    private String TAG = MyAsyncTask.class.getSimpleName();
+    private String TAG = PostHitAsyncTask.class.getSimpleName();
 
-    public MyAsyncTask(String url, String requestJson, ResponseCallback callback) {
+    public PostHitAsyncTask(String url, String requestJson, ResponseCallback callback) {
         this.callback = callback;
         this.url = url;
         this.requestJson = requestJson;

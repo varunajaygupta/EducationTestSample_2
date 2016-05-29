@@ -78,7 +78,7 @@ public class TestInstructionsFragment extends Fragment implements View.OnClickLi
     }
 
     private void fetchQuestionsAndLaunchQuestionFragment() {
-//        MyAsyncTask myAsyncTask=new MyAsyncTask("", "", new ResponseCallback() {
+//        PostHitAsyncTask myAsyncTask=new PostHitAsyncTask("", "", new ResponseCallback() {
 //            @Override
 //            public void onResult(String Response) {
 ////                Gson gson= new Gson();

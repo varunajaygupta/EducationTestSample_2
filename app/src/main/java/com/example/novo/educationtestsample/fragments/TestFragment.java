@@ -56,9 +56,8 @@ public class TestFragment extends Fragment {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter viewPagerAdapter= new ViewPagerAdapter(getChildFragmentManager());
-        viewPagerAdapter.addFragment(getString(R.string.available_tests), new AvailableTests());
-        viewPagerAdapter.addFragment(getString(R.string.missed_tests), new MissedTests());
-        viewPagerAdapter.addFragment(getString(R.string.pending_tests), new PendingTests());
+        viewPagerAdapter.addFragment(getString(R.string.past_tests), new UpcomingTests());
+        viewPagerAdapter.addFragment(getString(R.string.upcoming_tests), new PastTests());
         viewPager.setAdapter(viewPagerAdapter);
     }
 

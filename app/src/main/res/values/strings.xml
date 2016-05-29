@@ -19,8 +19,8 @@
     <string name="title_test">Tests</string>
     <string name="title_forum">Forum</string>
     <string name="title_result">Results</string>
-    <string name="available_tests">Available Tests</string>
-    <string name="pending_tests">Pending Tests</string>
+    <string name="past_tests">Past Tests</string>
+    <string name="upcoming_tests">Upcoming Tests</string>
     <string name="missed_tests">Missed Tests</string>
 
     <!-- TODO: Remove or change this placeholder text -->

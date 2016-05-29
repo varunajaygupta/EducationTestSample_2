@@ -21,7 +21,6 @@ import com.example.novo.educationtestsample.interfaces.FragmentInteractionListen
 
 public class MainActivity extends AppCompatActivity implements FragmentInteractionListener,FragmentDrawer.FragmentDrawerListener {
 
-    public FragmentDrawer drawerFragment;
     public Toolbar mToolbar;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;

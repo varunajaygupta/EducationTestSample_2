@@ -12,10 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.novo.educationtestsample.R;
+import com.example.novo.educationtestsample.Utils.PostHitAsyncTask;
 import com.example.novo.educationtestsample.Utils.Utils;
 import com.example.novo.educationtestsample.adapters.TestAdapter;
 import com.example.novo.educationtestsample.interfaces.ClickListener;
 import com.example.novo.educationtestsample.interfaces.FragmentInteractionListener;
+import com.example.novo.educationtestsample.interfaces.ResponseCallback;
 import com.example.novo.educationtestsample.models.QuestionListJSON;
 import com.example.novo.educationtestsample.models.Test;
 import com.google.gson.Gson;
@@ -28,7 +30,7 @@ import java.util.Collection;
 import java.util.List;
 
 
-public class AvailableTests extends Fragment {
+public class UpcomingTests extends Fragment {
 
     FragmentInteractionListener mListener;
     private RecyclerView recyclerView;
@@ -38,7 +40,7 @@ public class AvailableTests extends Fragment {
     QuestionListJSON questionListJSON;
 
 
-    public AvailableTests() {
+    public UpcomingTests() {
         // Required empty public constructor
     }
 
@@ -47,7 +49,7 @@ public class AvailableTests extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        getTopicsList();
         testList= new ArrayList<Test>();
         Gson gson= new Gson();
         Type collectionType = new TypeToken<Collection<Test>>(){}.getType();
@@ -58,20 +60,20 @@ public class AvailableTests extends Fragment {
     }
 
     private void getTopicsList() {
-//        startLoader();
-//        MyAsyncTask myAsyncTask= new MyAsyncTask("", "", new ResponseCallback() {
-//            //TO DO
-//
-//            @Override
-//            public void onResult(String Response) {
-//                testAdapter.setData(TestList);
-//                testAdapter.notifyDataSetChanged();
-//
-//
-//            }
-//        });
-//         myAsyncTask.execute();
-//
+        startLoader();
+        PostHitAsyncTask myAsyncTask= new PostHitAsyncTask("", "", new ResponseCallback() {
+            //TO DO
+
+            @Override
+            public void onResult(String Response) {
+             //   testAdapter.setData("");
+                testAdapter.notifyDataSetChanged();
+
+
+            }
+        });
+         myAsyncTask.execute();
+
         testAdapter.setData(testList);
         testAdapter.notifyDataSetChanged();
 
