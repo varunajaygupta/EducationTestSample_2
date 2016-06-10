@@ -3,6 +3,7 @@ package com.example.novo.educationtestsample.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -13,12 +14,16 @@ import android.widget.Toast;
 import com.example.novo.educationtestsample.R;
 import com.example.novo.educationtestsample.Utils.AppInfo;
 import com.example.novo.educationtestsample.Utils.ConstURL;
+import com.example.novo.educationtestsample.Utils.DateTimeUtils;
 import com.example.novo.educationtestsample.Utils.PostHitAsyncTask;
 import com.example.novo.educationtestsample.Utils.Utils;
 import com.example.novo.educationtestsample.interfaces.ResponseCallback;
 import com.example.novo.educationtestsample.models.LoginRequest;
 import com.example.novo.educationtestsample.models.LoginResponse;
 import com.google.gson.Gson;
+
+import java.util.Calendar;
+import java.util.Date;
 
 public class SplashScreen extends AppCompatActivity {
 
@@ -29,11 +34,16 @@ public class SplashScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
         context = this;
+
+        Log.e("Date",String.valueOf(System.currentTimeMillis()));
         checkForStoredCredentials();
+
     }
 
     private void checkForStoredCredentials() {
         if (!AppInfo.DEFAULT_VALUE.equalsIgnoreCase(AppInfo.getIsKeepMeSignIn((Activity) context))&&!AppInfo.DEFAULT_VALUE.equalsIgnoreCase(AppInfo.getUserId((Activity) context)) && !AppInfo.DEFAULT_VALUE.equalsIgnoreCase(AppInfo.getUserPassword((Activity) context))) {
+           Log.e("Batchid",AppInfo.getBatchId(context));
+           Log.e("Coachingid",AppInfo.getCoachingId(context));
             hitLogin();
         }else{
             startActivity(new Intent(context, LoginScreen.class));

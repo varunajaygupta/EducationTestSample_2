@@ -55,4 +55,30 @@
     <string name="first_time_login">First time login</string>
     <string name="OK">OK</string>
     <string name="first_time_login_message">Welcome to Study Solo. Please do your first login from our web portal.</string>
+    <string name="coaching_id">coachingId</string>
+    <string name="batch_id">batchId</string>
+    <string name="current_date">currentDate</string>
+
+
+    //Get Hit params
+    <string name="get_test_data"> \"where\": {
+                            coaching_id: coachingId,
+                            batches: batchId,
+                            status: \"submitted\",
+                            "teacher_id": "teacherc1t1",
+                            window_stop: {
+                                gt: currentDate
+                            }
+                        },
+                        \"fields\": {
+                            test_id: true,
+                            title: true,
+                            duration_seconds: true,
+                            topics: true,
+                            window_start: true,
+                            window_stop: true,
+                            total_marks: true
+                        },
+                        \"order\": \"date_updated DESC\"</string>
+
 </resources>

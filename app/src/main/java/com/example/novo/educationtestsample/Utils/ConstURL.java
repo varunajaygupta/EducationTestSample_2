@@ -5,4 +5,5 @@ package com.example.novo.educationtestsample.Utils;
  */
 public class ConstURL {
     public static final String LOGIN="http://studysolo.com/api/students/checklogin";
+    public static final String FETCH_TEST_DATA="http://studysolo.com/api/testdata?filter=";
 }

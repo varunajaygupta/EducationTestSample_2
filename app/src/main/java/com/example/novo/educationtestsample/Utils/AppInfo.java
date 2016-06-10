@@ -18,8 +18,9 @@ public class AppInfo {
     public static final String IS_KEEP_ME_SIGN_IN="IS_KEEP_ME_SIGN_IN";
     public static final String COACHING_ID="COACHING_ID";
     public static final String BATCH_ID="BATCH_ID";
+    private static final String TEACHER_ID = "TEACHER_ID";
 
-   public static void setUserId(Context activity, String userId){
+    public static void setUserId(Context activity, String userId){
        SharedPreferences sharedPref = activity.getSharedPreferences(
                APPLICATION_INFO, Context.MODE_PRIVATE);
        SharedPreferences.Editor editor= sharedPref.edit();
@@ -77,7 +78,7 @@ public class AppInfo {
         SharedPreferences sharedPref = activity.getSharedPreferences(
                 APPLICATION_INFO, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor= sharedPref.edit();
-        editor.putString(COACHING_ID,batchId);
+        editor.putString(BATCH_ID,batchId);
         editor.commit();
     }
 
@@ -85,5 +86,19 @@ public class AppInfo {
         SharedPreferences sharedPref = activity.getSharedPreferences(
                 APPLICATION_INFO, Context.MODE_PRIVATE);
         return sharedPref.getString(BATCH_ID,DEFAULT_VALUE);
+    }
+
+    public static void setTeacherId(Context activity,String teacherId) {
+        SharedPreferences sharedPref = activity.getSharedPreferences(
+                APPLICATION_INFO, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor= sharedPref.edit();
+        editor.putString(TEACHER_ID,teacherId);
+        editor.commit();
+    }
+
+    public static String getTeacherId(Context activity) {
+        SharedPreferences sharedPref = activity.getSharedPreferences(
+                APPLICATION_INFO, Context.MODE_PRIVATE);
+        return sharedPref.getString(TEACHER_ID,DEFAULT_VALUE);
     }
 }

@@ -32,7 +32,7 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.TestViewHolder
         this.data = data;
     }
 
-    public TestAdapter(Context context, List<Test> data, ClickListener clickListener) {
+    public  TestAdapter(Context context, List<Test> data, ClickListener clickListener) {
         this.context = context;
         inflater = LayoutInflater.from(context);
         this.data = data;
@@ -51,12 +51,12 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.TestViewHolder
     }
 
     @Override
-    public void onBindViewHolder(TestViewHolder holder, final int position) {
+    public void onBindViewHolder(final TestViewHolder holder, final int position) {
         holder.title.setText(data.get(position).getTitle());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                clickListener.onClick(position);
+                clickListener.onClick(position,holder);
 
 
             }
@@ -72,10 +72,13 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.TestViewHolder
 
     public class TestViewHolder extends RecyclerView.ViewHolder{
 
-        TextView title;
+      public TextView title;
+      public  TextView description;
+
         public TestViewHolder(View itemView) {
             super(itemView);
             title=(TextView)itemView.findViewById(R.id.topic_title);
+            description=(TextView)itemView.findViewById(R.id.description);
         }
     }
 }

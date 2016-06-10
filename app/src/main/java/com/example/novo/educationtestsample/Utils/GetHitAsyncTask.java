@@ -1,7 +1,8 @@
 package com.example.novo.educationtestsample.Utils;
 
-
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.example.novo.educationtestsample.interfaces.ResponseCallback;
 
@@ -11,53 +12,45 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
-import java.util.Date;
+import java.net.URLConnection;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class PostHitAsyncTask extends AsyncTask<String, String, String> {
+/**
+ * Created by Varun on 5/30/2016.
+ */
+public class GetHitAsyncTask extends AsyncTask<String,String,String> {
+
 
     private ResponseCallback callback;
     private String url;
     private String requestJson;
-    private String TAG = PostHitAsyncTask.class.getSimpleName();
+    private static final String TAG = "GetHitAsyncTask";
 
-    public PostHitAsyncTask(String url, String requestJson, ResponseCallback callback) {
+    public GetHitAsyncTask(String url, String requestJson, ResponseCallback callback) {
         this.callback = callback;
         this.url = url;
-        this.requestJson = requestJson;
+        this.requestJson=Uri.encode(requestJson);
     }
-
-    @Override
-    protected void onPreExecute() {
-    }
-
     @Override
     protected String doInBackground(String... params) {
-
         URL url;
         String response = "";
         try {
-            url = new URL(this.url);
+
+            url = new URL(this.url+requestJson);
+            Log.e(TAG, "doInBackground: url: " + url);
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setReadTimeout(15000);
             conn.setConnectTimeout(15000);
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+            conn.setRequestMethod("GET");
+//            conn.setRequestProperty("Content-Type", "application/json");
             conn.setDoInput(true);
-            conn.setDoOutput(true);
+       //     conn.setDoOutput(true);
 
-
-            OutputStream os = conn.getOutputStream();
-            BufferedWriter writer = new BufferedWriter(
-                    new OutputStreamWriter(os, "UTF-8"));
-            writer.write(requestJson);
-
-            writer.flush();
-            writer.close();
-            os.close();
             int responseCode=conn.getResponseCode();
             if (responseCode == HttpsURLConnection.HTTP_OK) {
                 String line;
@@ -71,18 +64,13 @@ public class PostHitAsyncTask extends AsyncTask<String, String, String> {
             e.printStackTrace();
         }
 
+        Log.e(TAG, "doInBackground: resp; " + response);
         return response;
     }
 
     @Override
-    protected void onPostExecute(String result) {
-        callback.onResult(result);
+    protected void onPostExecute(String response) {
+        super.onPostExecute(response);
+        callback.onResult(response);
     }
-
-    @Override
-    protected void onProgressUpdate(String... text) {
-    }
-
-
-
 }

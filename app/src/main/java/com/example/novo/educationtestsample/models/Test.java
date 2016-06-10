@@ -1,5 +1,6 @@
 package com.example.novo.educationtestsample.models;
 
+import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.io.Serializable;
@@ -7,64 +8,50 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class Test
+public class Test implements Parcelable
 {
-    private String id;
-
-    private String duration_mins;
-
-    private String coaching_id;
-
-    private ArrayList<String> topics;
+    private String[] topics;
 
     private String title;
 
-    private String status;
+    private String duration_seconds;
 
-    private String description;
+    private String window_stop;
 
-    private ArrayList<String> batches;
-
-  //  private ArrayList<Question> questions;
+    private String window_start;
 
     private String test_id;
 
-    public String getId ()
-    {
-        return id;
+    private String total_marks;
+
+    protected Test(Parcel in) {
+        topics = in.createStringArray();
+        title = in.readString();
+        duration_seconds = in.readString();
+        window_stop = in.readString();
+        window_start = in.readString();
+        test_id = in.readString();
+        total_marks = in.readString();
     }
 
-    public void setId (String id)
-    {
-        this.id = id;
-    }
+    public static final Creator<Test> CREATOR = new Creator<Test>() {
+        @Override
+        public Test createFromParcel(Parcel in) {
+            return new Test(in);
+        }
 
-    public String getDuration_mins ()
-    {
-        return duration_mins;
-    }
+        @Override
+        public Test[] newArray(int size) {
+            return new Test[size];
+        }
+    };
 
-    public void setDuration_mins (String duration_mins)
-    {
-        this.duration_mins = duration_mins;
-    }
-
-    public String getCoaching_id ()
-    {
-        return coaching_id;
-    }
-
-    public void setCoaching_id (String coaching_id)
-    {
-        this.coaching_id = coaching_id;
-    }
-
-    public ArrayList<String> getTopics ()
+    public String[] getTopics ()
     {
         return topics;
     }
 
-    public void setTopics (ArrayList<String> topics)
+    public void setTopics (String[] topics)
     {
         this.topics = topics;
     }
@@ -79,45 +66,35 @@ public class Test
         this.title = title;
     }
 
-    public String getStatus ()
+    public String getDuration_seconds ()
     {
-        return status;
+        return duration_seconds;
     }
 
-    public void setStatus (String status)
+    public void setDuration_seconds (String duration_seconds)
     {
-        this.status = status;
+        this.duration_seconds = duration_seconds;
     }
 
-    public String getDescription ()
+    public String getWindow_stop ()
     {
-        return description;
+        return window_stop;
     }
 
-    public void setDescription (String description)
+    public void setWindow_stop (String window_stop)
     {
-        this.description = description;
+        this.window_stop = window_stop;
     }
 
-    public ArrayList<String> getBatches ()
+    public String getWindow_start ()
     {
-        return batches;
+        return window_start;
     }
 
-    public void setBatches (ArrayList<String> batches)
+    public void setWindow_start (String window_start)
     {
-        this.batches = batches;
+        this.window_start = window_start;
     }
-
-//    public ArrayList<Question> getQuestions ()
-//    {
-//        return questions;
-//    }
-
-//    public void setQuestions (ArrayList<Question> questions)
-//    {
-//        this.questions = questions;
-//    }
 
     public String getTest_id ()
     {
@@ -129,9 +106,35 @@ public class Test
         this.test_id = test_id;
     }
 
+    public String getTotal_marks ()
+    {
+        return total_marks;
+    }
+
+    public void setTotal_marks (String total_marks)
+    {
+        this.total_marks = total_marks;
+    }
+
     @Override
     public String toString()
     {
-        return "ClassPojo [id = "+id+", duration_mins = "+duration_mins+", coaching_id = "+coaching_id+", topics = "+topics+", title = "+title+", status = "+status+", description = "+description+", batches = "+batches+", test_id = "+test_id+"]";
+        return "ClassPojo [topics = "+topics+", title = "+title+", duration_seconds = "+duration_seconds+", window_stop = "+window_stop+", window_start = "+window_start+", test_id = "+test_id+", total_marks = "+total_marks+"]";
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeStringArray(topics);
+        dest.writeString(title);
+        dest.writeString(duration_seconds);
+        dest.writeString(window_stop);
+        dest.writeString(window_start);
+        dest.writeString(test_id);
+        dest.writeString(total_marks);
     }
 }

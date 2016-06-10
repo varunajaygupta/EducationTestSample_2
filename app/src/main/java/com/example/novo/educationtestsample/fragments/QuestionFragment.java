@@ -28,6 +28,7 @@ import com.example.novo.educationtestsample.Utils.Utils;
 import com.example.novo.educationtestsample.activities.MainActivity;
 import com.example.novo.educationtestsample.adapters.OptionListAdapter;
 import com.example.novo.educationtestsample.adapters.QuestionListAdapter;
+import com.example.novo.educationtestsample.adapters.TestAdapter;
 import com.example.novo.educationtestsample.interfaces.ClickListener;
 import com.example.novo.educationtestsample.interfaces.FragmentInteractionListener;
 import com.example.novo.educationtestsample.models.Answer;
@@ -195,6 +196,11 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
         questionListAdapter=new QuestionListAdapter(getActivity(),new ClickListener() {
             @Override
             public void onClick(int position) {
+
+            }
+
+            @Override
+            public void onClick(int position, RecyclerView.ViewHolder v) {
                 onSave();
                 questionListJSON.setCurrentQuestion(position);
                 resetData();
@@ -220,6 +226,11 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
         optionListAdapter=new OptionListAdapter(getActivity(),currentQuestion, new ClickListener() {
             @Override
             public void onClick(int position) {
+
+            }
+
+            @Override
+            public void onClick(int position, RecyclerView.ViewHolder v) {
 
             }
 

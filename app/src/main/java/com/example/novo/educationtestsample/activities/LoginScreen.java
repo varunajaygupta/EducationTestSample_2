@@ -45,6 +45,10 @@ public class LoginScreen extends AppCompatActivity implements View.OnClickListen
         context = this;
         initializeViews();
         login.setOnClickListener(this);
+        userName="studentc1t1";
+        password="qkpak4";
+        cbKeepMeSignedIn.setChecked(true);
+        hitLogin();
     }
 
     public void initializeViews() {
@@ -79,6 +83,8 @@ public class LoginScreen extends AppCompatActivity implements View.OnClickListen
     }
 
     private void validateInputFeildsAndLogin() {
+
+
         if (userName.isEmpty() && password.isEmpty()) {
             tvEmptyUsername.setVisibility(View.VISIBLE);
             tvEmptyPassword.setVisibility(View.VISIBLE);
@@ -135,6 +141,7 @@ public class LoginScreen extends AppCompatActivity implements View.OnClickListen
         AppInfo.setUserPassword(this, password);
         AppInfo.setCoachingId(this,coachingId);
         AppInfo.setBatchId(this,batchId);
+        AppInfo.setTeacherId(this,"teacherc1t1");
         AppInfo.setIsKeepMeSignIn(this, String.valueOf(cbKeepMeSignedIn.isChecked()));
     }
 

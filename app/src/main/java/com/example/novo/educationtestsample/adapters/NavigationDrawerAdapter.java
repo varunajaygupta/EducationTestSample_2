@@ -8,8 +8,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.novo.educationtestsample.R;
-import com.example.novo.educationtestsample.activities.MainActivity;
-import com.example.novo.educationtestsample.fragments.FragmentDrawer;
 import com.example.novo.educationtestsample.interfaces.ClickListener;
 import com.example.novo.educationtestsample.models.NavDrawerItem;
 

@@ -1,7 +1,6 @@
 package com.example.novo.educationtestsample.fragments;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
@@ -10,12 +9,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.novo.educationtestsample.R;
 import com.example.novo.educationtestsample.adapters.NavigationDrawerAdapter;
+import com.example.novo.educationtestsample.adapters.TestAdapter;
 import com.example.novo.educationtestsample.interfaces.ClickListener;
 import com.example.novo.educationtestsample.models.NavDrawerItem;
 
@@ -71,6 +70,11 @@ public class FragmentDrawer extends Fragment {
             public void onClick(int position) {
                 drawerListener.onDrawerItemSelected(position);
                 mDrawerLayout.closeDrawer(containerView);
+            }
+
+            @Override
+            public void onClick(int position, RecyclerView.ViewHolder v) {
+
             }
 
             @Override

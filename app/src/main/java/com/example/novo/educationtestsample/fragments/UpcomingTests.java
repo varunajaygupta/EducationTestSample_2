@@ -7,13 +7,16 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.novo.educationtestsample.R;
-import com.example.novo.educationtestsample.Utils.PostHitAsyncTask;
-import com.example.novo.educationtestsample.Utils.Utils;
+import com.example.novo.educationtestsample.Utils.AppInfo;
+import com.example.novo.educationtestsample.Utils.ConstURL;
+import com.example.novo.educationtestsample.Utils.GetHitAsyncTask;
+import com.example.novo.educationtestsample.Utils.SQLQueryUtils;
 import com.example.novo.educationtestsample.adapters.TestAdapter;
 import com.example.novo.educationtestsample.interfaces.ClickListener;
 import com.example.novo.educationtestsample.interfaces.FragmentInteractionListener;
@@ -26,7 +29,6 @@ import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 
@@ -35,9 +37,12 @@ public class UpcomingTests extends Fragment {
     FragmentInteractionListener mListener;
     private RecyclerView recyclerView;
     private TestAdapter testAdapter;
-    public static List<Test> testList;
+    public static List<Test> testList = new ArrayList<>();
     ProgressDialog progress;
     QuestionListJSON questionListJSON;
+    private static final String TAG = "UpcomingTests";
+    static int expandedItemPostion = -1;
+    private RecyclerView.ViewHolder lastViewHolder=null;
 
 
     public UpcomingTests() {
@@ -45,37 +50,35 @@ public class UpcomingTests extends Fragment {
     }
 
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getTopicsList();
-        testList= new ArrayList<Test>();
-        Gson gson= new Gson();
-        Type collectionType = new TypeToken<Collection<Test>>(){}.getType();
-        testList = gson.fromJson(Utils.loadJSONfromAssests(getContext(), "Quiz.json"), collectionType);
-        questionListJSON=QuestionListJSON.getInstance();
 
 
     }
 
-    private void getTopicsList() {
+    private void getTopicsList(final View view) {
         startLoader();
-        PostHitAsyncTask myAsyncTask= new PostHitAsyncTask("", "", new ResponseCallback() {
-            //TO DO
+        String requestParams = SQLQueryUtils.FETCH_TEST_DATA_QUERY;
+        requestParams = requestParams.replaceAll(SQLQueryUtils.COACHING_ID, AppInfo.getCoachingId(getActivity()));
+        requestParams = requestParams.replaceAll(SQLQueryUtils.BATCH_ID, AppInfo.getBatchId(getActivity()));
+        requestParams = requestParams.replaceAll(SQLQueryUtils.TEACHER_ID, AppInfo.getTeacherId(getActivity()));
+        requestParams = requestParams.replaceAll(SQLQueryUtils.CURRENT_DATE, String.valueOf(0));
 
+        GetHitAsyncTask getHitAsyncTask = new GetHitAsyncTask(ConstURL.FETCH_TEST_DATA, requestParams, new ResponseCallback() {
             @Override
-            public void onResult(String Response) {
-             //   testAdapter.setData("");
+            public void onResult(String response) {
+                stopLoader();
+                Type listType = new TypeToken<ArrayList<Test>>() {
+                }.getType();
+                testList = new Gson().fromJson(response, listType);
+                Log.e(TAG, "onResult: " + testList.toString());
+                testAdapter.setData(testList);
                 testAdapter.notifyDataSetChanged();
-
-
             }
         });
-         myAsyncTask.execute();
 
-        testAdapter.setData(testList);
-        testAdapter.notifyDataSetChanged();
+        getHitAsyncTask.execute();
 
 
     }
@@ -84,7 +87,8 @@ public class UpcomingTests extends Fragment {
         progress = ProgressDialog.show(getContext(), "Loading",
                 "Loading tests ", true);
     }
-    private void stopLoader(){
+
+    private void stopLoader() {
         progress.dismiss();
     }
 
@@ -92,16 +96,27 @@ public class UpcomingTests extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view= inflater.inflate(R.layout.fragment_available_tests, container, false);
-         recyclerView=(RecyclerView)view.findViewById(R.id.topicList);
-         recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getActivity()).color(Color.WHITE)
-                 .sizeResId(R.dimen.divider).build());
-         testAdapter=new TestAdapter(getActivity(),testList, new ClickListener() {
+        View view = inflater.inflate(R.layout.fragment_available_tests, container, false);
+        recyclerView = (RecyclerView) view.findViewById(R.id.topicList);
+        recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getActivity()).color(Color.WHITE)
+                .sizeResId(R.dimen.divider).build());
+        testAdapter = new TestAdapter(getActivity(), testList, new ClickListener() {
             @Override
             public void onClick(int position) {
-                questionListJSON.setTestDuration(testList.get(position).getDuration_mins());
-                questionListJSON.setTestId(testList.get(position).getTest_id());
-                mListener.replaceFragment(new TestInstructionsFragment(),"Instructions");
+
+            }
+
+            @Override
+            public void onClick(int position, RecyclerView.ViewHolder viewHolder) {
+                // questionListJSON.setTestDuration(testList.get(position).getDuration_mins());
+                if(lastViewHolder!=null){
+                    ((TestAdapter.TestViewHolder)lastViewHolder).description.setVisibility(View.GONE);
+                }
+                ((TestAdapter.TestViewHolder)viewHolder).description.setVisibility(View.VISIBLE);
+                Log.e(TAG, "Position: "+ String.valueOf(expandedItemPostion));
+                lastViewHolder=viewHolder;
+//                questionListJSON.setTestId(testList.get(position).getTest_id());
+//                mListener.replaceFragment(new TestInstructionsFragment(), "Instructions");
             }
 
             @Override
@@ -109,15 +124,15 @@ public class UpcomingTests extends Fragment {
 
             }
 
-             @Override
-             public void onNoOfAttemptedQuesChanged(int noOfAttemptedQuesChanged) {
+            @Override
+            public void onNoOfAttemptedQuesChanged(int noOfAttemptedQuesChanged) {
 
-             }
-         });
+            }
+        });
         recyclerView.setAdapter(testAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-     //   getTopicsList();
-         return view;
+        getTopicsList(view);
+        return view;
     }
 
 
@@ -138,15 +153,5 @@ public class UpcomingTests extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
 
 }
