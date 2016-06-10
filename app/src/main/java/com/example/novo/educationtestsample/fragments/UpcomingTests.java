@@ -59,13 +59,14 @@ public class UpcomingTests extends Fragment {
 
     private void getTopicsList(final View view) {
         startLoader();
-        String requestParams = SQLQueryUtils.FETCH_TEST_DATA_QUERY;
+        String requestParams = SQLQueryUtils.FETCH_TEST_LIST_QUERY;
         requestParams = requestParams.replaceAll(SQLQueryUtils.COACHING_ID, AppInfo.getCoachingId(getActivity()));
         requestParams = requestParams.replaceAll(SQLQueryUtils.BATCH_ID, AppInfo.getBatchId(getActivity()));
         requestParams = requestParams.replaceAll(SQLQueryUtils.TEACHER_ID, AppInfo.getTeacherId(getActivity()));
-        requestParams = requestParams.replaceAll(SQLQueryUtils.CURRENT_DATE, String.valueOf(0));
+        requestParams = requestParams.replaceAll(SQLQueryUtils.CURRENT_DATE, String.valueOf(System.currentTimeMillis()));
+        requestParams = requestParams.replaceAll(SQLQueryUtils.OPERATOR_VALUE,SQLQueryUtils.GREATER_THAN );
 
-        GetHitAsyncTask getHitAsyncTask = new GetHitAsyncTask(ConstURL.FETCH_TEST_DATA, requestParams, new ResponseCallback() {
+        GetHitAsyncTask getHitAsyncTask = new GetHitAsyncTask(ConstURL.FETCH_TEST_LIST, requestParams, new ResponseCallback() {
             @Override
             public void onResult(String response) {
                 stopLoader();

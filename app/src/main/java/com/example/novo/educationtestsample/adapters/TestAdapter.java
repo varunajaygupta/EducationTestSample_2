@@ -78,7 +78,7 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.TestViewHolder
         public TestViewHolder(View itemView) {
             super(itemView);
             title=(TextView)itemView.findViewById(R.id.topic_title);
-            description=(TextView)itemView.findViewById(R.id.description);
+            description=(TextView)itemView.findViewById(R.id.tv_description);
         }
     }
 }

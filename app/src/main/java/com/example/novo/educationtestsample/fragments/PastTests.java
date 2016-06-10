@@ -1,71 +1,95 @@
 package com.example.novo.educationtestsample.fragments;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.novo.educationtestsample.R;
+import com.example.novo.educationtestsample.Utils.AppInfo;
+import com.example.novo.educationtestsample.Utils.ConstURL;
+import com.example.novo.educationtestsample.Utils.GetHitAsyncTask;
+import com.example.novo.educationtestsample.Utils.SQLQueryUtils;
+import com.example.novo.educationtestsample.adapters.TestAdapter;
+import com.example.novo.educationtestsample.interfaces.ClickListener;
 import com.example.novo.educationtestsample.interfaces.FragmentInteractionListener;
+import com.example.novo.educationtestsample.interfaces.ResponseCallback;
+import com.example.novo.educationtestsample.models.QuestionListJSON;
+import com.example.novo.educationtestsample.models.Test;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link PastTests.fragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link PastTests#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+
+
 public class PastTests extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private FragmentInteractionListener mListener;
+    FragmentInteractionListener mListener;
+    private RecyclerView recyclerView;
+    private TestAdapter testAdapter;
+    public static List<Test> testList = new ArrayList<>();
+    ProgressDialog progress;
+    QuestionListJSON questionListJSON;
+    private static final String TAG = "PastTests";
+    static int expandedItemPostion = -1;
+    private RecyclerView.ViewHolder lastViewHolder=null;
 
     public PastTests() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment PastTests.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static PastTests newInstance(String param1, String param2) {
-        PastTests fragment = new PastTests();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_pending_tests, container, false);
+        View view = inflater.inflate(R.layout.fragment_missed_tests, container, false);
+        recyclerView = (RecyclerView) view.findViewById(R.id.topicList);
+        recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getActivity()).color(Color.WHITE)
+                .sizeResId(R.dimen.divider).build());
+        testAdapter = new TestAdapter(getActivity(), testList, new ClickListener() {
+            @Override
+            public void onClick(int position) {
+
+            }
+
+            @Override
+            public void onClick(int position, RecyclerView.ViewHolder viewHolder) {
+                // questionListJSON.setTestDuration(testList.get(position).getDuration_mins());
+                if(lastViewHolder!=null){
+                    ((TestAdapter.TestViewHolder)lastViewHolder).description.setVisibility(View.GONE);
+                }
+                ((TestAdapter.TestViewHolder)viewHolder).description.setVisibility(View.VISIBLE);
+                Log.e(TAG, "Position: "+ String.valueOf(expandedItemPostion));
+                lastViewHolder=viewHolder;
+//                questionListJSON.setTestId(testList.get(position).getTest_id());
+//                mListener.replaceFragment(new TestInstructionsFragment(), "Instructions");
+            }
+
+            @Override
+            public void onLongClick(int position) {
+
+            }
+
+            @Override
+            public void onNoOfAttemptedQuesChanged(int noOfAttemptedQuesChanged) {
+
+            }
+        });
+        recyclerView.setAdapter(testAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        getTopicsList(view);
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -88,15 +112,40 @@ public class PastTests extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+    private void getTopicsList(final View view) {
+        startLoader();
+        String requestParams = SQLQueryUtils.FETCH_TEST_LIST_QUERY;
+        requestParams = requestParams.replaceAll(SQLQueryUtils.COACHING_ID, AppInfo.getCoachingId(getActivity()));
+        requestParams = requestParams.replaceAll(SQLQueryUtils.BATCH_ID, AppInfo.getBatchId(getActivity()));
+        requestParams = requestParams.replaceAll(SQLQueryUtils.TEACHER_ID, AppInfo.getTeacherId(getActivity()));
+        requestParams = requestParams.replaceAll(SQLQueryUtils.CURRENT_DATE, String.valueOf(System.currentTimeMillis()));
+        requestParams = requestParams.replaceAll(SQLQueryUtils.OPERATOR_VALUE,SQLQueryUtils.LOWER_THAN );
+
+        GetHitAsyncTask getHitAsyncTask = new GetHitAsyncTask(ConstURL.FETCH_TEST_LIST, requestParams, new ResponseCallback() {
+            @Override
+            public void onResult(String response) {
+                stopLoader();
+                Type listType = new TypeToken<ArrayList<Test>>() {
+                }.getType();
+                testList = new Gson().fromJson(response, listType);
+                Log.e(TAG, "onResult: " + testList.toString());
+                testAdapter.setData(testList);
+                testAdapter.notifyDataSetChanged();
+            }
+        });
+
+        getHitAsyncTask.execute();
+
+
+    }
+
+    private void startLoader() {
+        progress = ProgressDialog.show(getContext(), "Loading",
+                "Loading tests ", true);
+    }
+
+    private void stopLoader() {
+        progress.dismiss();
+    }
 
 }
