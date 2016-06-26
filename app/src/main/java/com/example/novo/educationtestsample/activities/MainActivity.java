@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
             fragmentTransaction.replace(R.id.container_body, fragment);
             fragmentTransaction.commit();
 
-            // set the toolbar title
+            // set the toolbar primaryTitle
             getSupportActionBar().setTitle(title);
         }
     }
@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements FragmentInteracti
             fragmentTransaction.replace(R.id.container_body, fragmentToReplace);
             fragmentTransaction.addToBackStack(backStackName);
             fragmentTransaction.commit();
-            // set the toolbar title
+            // set the toolbar primaryTitle
             getSupportActionBar().setTitle(titleOfFragment);
 
         }

@@ -12,12 +12,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bignerdranch.expandablerecyclerview.Model.ParentListItem;
 import com.example.novo.educationtestsample.R;
 import com.example.novo.educationtestsample.Utils.AppInfo;
 import com.example.novo.educationtestsample.Utils.ConstURL;
 import com.example.novo.educationtestsample.Utils.GetHitAsyncTask;
 import com.example.novo.educationtestsample.Utils.SQLQueryUtils;
 import com.example.novo.educationtestsample.adapters.TestAdapter;
+import com.example.novo.educationtestsample.adapters.TestAdapterWithAnimation;
 import com.example.novo.educationtestsample.interfaces.ClickListener;
 import com.example.novo.educationtestsample.interfaces.FragmentInteractionListener;
 import com.example.novo.educationtestsample.interfaces.ResponseCallback;
@@ -36,13 +38,17 @@ public class PastTests extends Fragment {
 
     FragmentInteractionListener mListener;
     private RecyclerView recyclerView;
-    private TestAdapter testAdapter;
+   // private TestAdapter testAdapter;
     public static List<Test> testList = new ArrayList<>();
     ProgressDialog progress;
     QuestionListJSON questionListJSON;
     private static final String TAG = "PastTests";
     static int expandedItemPostion = -1;
     private RecyclerView.ViewHolder lastViewHolder=null;
+
+    // fields for new Adapter
+    TestAdapterWithAnimation testAdapterWithAnimation;
+    List<ParentListItem> adapterTestList;
 
     public PastTests() {
         // Required empty public constructor
@@ -55,40 +61,13 @@ public class PastTests extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_missed_tests, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.topicList);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getActivity()).color(Color.WHITE)
                 .sizeResId(R.dimen.divider).build());
-        testAdapter = new TestAdapter(getActivity(), testList, new ClickListener() {
-            @Override
-            public void onClick(int position) {
+        adapterTestList= new ArrayList<>();
+        testAdapterWithAnimation = new TestAdapterWithAnimation(getActivity(), adapterTestList);
+        recyclerView.setAdapter(testAdapterWithAnimation);
 
-            }
-
-            @Override
-            public void onClick(int position, RecyclerView.ViewHolder viewHolder) {
-                // questionListJSON.setTestDuration(testList.get(position).getDuration_mins());
-                if(lastViewHolder!=null){
-                    ((TestAdapter.TestViewHolder)lastViewHolder).description.setVisibility(View.GONE);
-                }
-                ((TestAdapter.TestViewHolder)viewHolder).description.setVisibility(View.VISIBLE);
-                Log.e(TAG, "Position: "+ String.valueOf(expandedItemPostion));
-                lastViewHolder=viewHolder;
-//                questionListJSON.setTestId(testList.get(position).getTest_id());
-//                mListener.replaceFragment(new TestInstructionsFragment(), "Instructions");
-            }
-
-            @Override
-            public void onLongClick(int position) {
-
-            }
-
-            @Override
-            public void onNoOfAttemptedQuesChanged(int noOfAttemptedQuesChanged) {
-
-            }
-        });
-        recyclerView.setAdapter(testAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        getTopicsList(view);
         return view;
     }
 
@@ -112,7 +91,7 @@ public class PastTests extends Fragment {
         mListener = null;
     }
 
-    private void getTopicsList(final View view) {
+    private void getTopicsList() {
         startLoader();
         String requestParams = SQLQueryUtils.FETCH_TEST_LIST_QUERY;
         requestParams = requestParams.replaceAll(SQLQueryUtils.COACHING_ID, AppInfo.getCoachingId(getActivity()));
@@ -129,14 +108,23 @@ public class PastTests extends Fragment {
                 }.getType();
                 testList = new Gson().fromJson(response, listType);
                 Log.e(TAG, "onResult: " + testList.toString());
-                testAdapter.setData(testList);
-                testAdapter.notifyDataSetChanged();
-            }
+                testAdapterWithAnimation = new TestAdapterWithAnimation(getActivity(), getAdapterTestList());
+                recyclerView.setAdapter(testAdapterWithAnimation);
+             }
         });
 
         getHitAsyncTask.execute();
 
 
+    }
+
+
+    private List<ParentListItem> getAdapterTestList() {
+        adapterTestList= new ArrayList<>();
+        for(Test test:testList){
+        adapterTestList.add(test);
+        }
+        return adapterTestList;
     }
 
     private void startLoader() {
@@ -148,4 +136,16 @@ public class PastTests extends Fragment {
         progress.dismiss();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        getTopicsList();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+
+    }
 }

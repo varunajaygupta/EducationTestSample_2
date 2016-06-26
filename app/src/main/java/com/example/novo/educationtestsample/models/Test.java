@@ -3,13 +3,13 @@ package com.example.novo.educationtestsample.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.bignerdranch.expandablerecyclerview.Model.ParentListItem;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class Test implements Parcelable
-{
+public class Test implements ParentListItem, Serializable {
     private String[] topics;
 
     private String title;
@@ -24,27 +24,16 @@ public class Test implements Parcelable
 
     private String total_marks;
 
-    protected Test(Parcel in) {
-        topics = in.createStringArray();
-        title = in.readString();
-        duration_seconds = in.readString();
-        window_stop = in.readString();
-        window_start = in.readString();
-        test_id = in.readString();
-        total_marks = in.readString();
+
+    public Test(String[] topics, String title, String duration_seconds, String window_stop, String window_start, String test_id, String total_marks) {
+        this.topics = topics;
+        this.title = title;
+        this.duration_seconds = duration_seconds;
+        this.window_stop = window_stop;
+        this.window_start = window_start;
+        this.test_id = test_id;
+        this.total_marks = total_marks;
     }
-
-    public static final Creator<Test> CREATOR = new Creator<Test>() {
-        @Override
-        public Test createFromParcel(Parcel in) {
-            return new Test(in);
-        }
-
-        @Override
-        public Test[] newArray(int size) {
-            return new Test[size];
-        }
-    };
 
     public String[] getTopics ()
     {
@@ -119,22 +108,20 @@ public class Test implements Parcelable
     @Override
     public String toString()
     {
-        return "ClassPojo [topics = "+topics+", title = "+title+", duration_seconds = "+duration_seconds+", window_stop = "+window_stop+", window_start = "+window_start+", test_id = "+test_id+", total_marks = "+total_marks+"]";
+        return "ClassPojo [topics = "+topics+", primaryTitle = "+title+", duration_seconds = "+duration_seconds+", window_stop = "+window_stop+", window_start = "+window_start+", test_id = "+test_id+", total_marks = "+total_marks+"]";
+    }
+
+
+
+    @Override
+    public List<?> getChildItemList() {
+        ArrayList<Object>childObjectList= new ArrayList<>();
+        childObjectList.add(new Test(this.topics,this.title,this.duration_seconds,this.window_stop,this.window_start,this.test_id,this.total_marks));
+        return childObjectList;
     }
 
     @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeStringArray(topics);
-        dest.writeString(title);
-        dest.writeString(duration_seconds);
-        dest.writeString(window_stop);
-        dest.writeString(window_start);
-        dest.writeString(test_id);
-        dest.writeString(total_marks);
+    public boolean isInitiallyExpanded() {
+        return false;
     }
 }

@@ -18,6 +18,7 @@ import com.example.novo.educationtestsample.Utils.ConstURL;
 import com.example.novo.educationtestsample.Utils.GetHitAsyncTask;
 import com.example.novo.educationtestsample.Utils.SQLQueryUtils;
 import com.example.novo.educationtestsample.adapters.TestAdapter;
+import com.example.novo.educationtestsample.adapters.TestAdapterWithAnimation;
 import com.example.novo.educationtestsample.interfaces.ClickListener;
 import com.example.novo.educationtestsample.interfaces.FragmentInteractionListener;
 import com.example.novo.educationtestsample.interfaces.ResponseCallback;
@@ -44,7 +45,6 @@ public class UpcomingTests extends Fragment {
     static int expandedItemPostion = -1;
     private RecyclerView.ViewHolder lastViewHolder=null;
 
-
     public UpcomingTests() {
         // Required empty public constructor
     }
@@ -57,7 +57,7 @@ public class UpcomingTests extends Fragment {
 
     }
 
-    private void getTopicsList(final View view) {
+    private void getTopicsList() {
         startLoader();
         String requestParams = SQLQueryUtils.FETCH_TEST_LIST_QUERY;
         requestParams = requestParams.replaceAll(SQLQueryUtils.COACHING_ID, AppInfo.getCoachingId(getActivity()));
@@ -74,6 +74,7 @@ public class UpcomingTests extends Fragment {
                 }.getType();
                 testList = new Gson().fromJson(response, listType);
                 Log.e(TAG, "onResult: " + testList.toString());
+
                 testAdapter.setData(testList);
                 testAdapter.notifyDataSetChanged();
             }
@@ -109,15 +110,15 @@ public class UpcomingTests extends Fragment {
 
             @Override
             public void onClick(int position, RecyclerView.ViewHolder viewHolder) {
-                // questionListJSON.setTestDuration(testList.get(position).getDuration_mins());
                 if(lastViewHolder!=null){
-                    ((TestAdapter.TestViewHolder)lastViewHolder).description.setVisibility(View.GONE);
+                    ((TestAdapter.TestViewHolder)lastViewHolder).testDetails.setVisibility(View.GONE);
+                    ((TestAdapter.TestViewHolder)lastViewHolder).primaryTitle.setVisibility(View.VISIBLE);
                 }
-                ((TestAdapter.TestViewHolder)viewHolder).description.setVisibility(View.VISIBLE);
+                ((TestAdapter.TestViewHolder)viewHolder).testDetails.setVisibility(View.VISIBLE);
+                ((TestAdapter.TestViewHolder)viewHolder).primaryTitle.setVisibility(View.GONE);
                 Log.e(TAG, "Position: "+ String.valueOf(expandedItemPostion));
                 lastViewHolder=viewHolder;
-//                questionListJSON.setTestId(testList.get(position).getTest_id());
-//                mListener.replaceFragment(new TestInstructionsFragment(), "Instructions");
+             //   mListener.replaceFragment(new TestInstructionsFragment(), "Instructions");
             }
 
             @Override
@@ -132,7 +133,7 @@ public class UpcomingTests extends Fragment {
         });
         recyclerView.setAdapter(testAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        getTopicsList(view);
+     //   getTopicsList(view);
         return view;
     }
 
@@ -154,5 +155,9 @@ public class UpcomingTests extends Fragment {
         mListener = null;
     }
 
-
+    @Override
+    public void onStart() {
+        super.onStart();
+        getTopicsList();
+    }
 }

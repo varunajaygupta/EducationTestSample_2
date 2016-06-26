@@ -1,25 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
 
     >
     <TextView
-        android:id="@+id/topic_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/d15"
-        android:text="@string/dummytext"
-        android:background="@color/grey"
-        android:gravity="center"
-        />
-    <TextView
-        android:id="@+id/tv_description"
+        android:id="@+id/tv_test_title_primary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Description "
+        android:text="Dummy Text"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="@dimen/d10"
         android:visibility="gone"
         />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/rl_test_details"
+        android:visibility="visible"
 
-</LinearLayout>
+        >
+    <TextView
+        android:id="@+id/tv_test_title_secondary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/dummytext"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="@dimen/d10"
+        android:textStyle="bold"
+        />
+    <TextView
+        android:id="@+id/tv_duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:text="@string/dummytext"
+        android:layout_marginTop="@dimen/d10"
+        android:layout_marginBottom="@dimen/d1"
+        android:layout_marginRight="@dimen/d4"
+        />
+    <TextView
+        android:id="@+id/tv_marks"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/tv_duration"
+        android:text="@string/dummytext"
+        android:layout_marginBottom="@dimen/d1"
+        android:layout_marginRight="@dimen/d4"
+        />
+    <TextView
+        android:id="@+id/tv_test_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_test_title_secondary"
+        android:layout_centerHorizontal="true"
+        android:text="@string/dummytext"
+        android:textSize="@dimen/s10"
+        android:layout_alignParentLeft="true"
+        />
+    <TextView
+        android:id="@+id/tv_test_open_window"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_marks"
+        android:text="12/May/1991 - 13/Jun/1993"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/d4"
+        />
+    </RelativeLayout>
+</RelativeLayout>

@@ -81,4 +81,6 @@
                         },
                         \"order\": \"date_updated DESC\"</string>
 
+    <string name="marks">Total marks: </string>
+    <string name="duration">Duration: </string>
 </resources>
