@@ -2,6 +2,7 @@ package com.example.novo.educationtestsample.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,12 +11,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.novo.educationtestsample.R;
+import com.example.novo.educationtestsample.Utils.ConstUtils;
 import com.example.novo.educationtestsample.fragments.QuestionFragment;
 import com.example.novo.educationtestsample.interfaces.ClickListener;
 import com.example.novo.educationtestsample.models.Answer;
 import com.example.novo.educationtestsample.models.Question;
 import com.example.novo.educationtestsample.models.QuestionListJSON;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -31,12 +34,12 @@ public class OptionListAdapter extends RecyclerView.Adapter<OptionListAdapter.Op
     public QuestionFragment fragment;
 
 
-    public OptionListAdapter(Context context, Question currentQuestion, ClickListener clickListener,QuestionFragment fragment) {
+    public OptionListAdapter(Context context, Question currentQuestion, ClickListener clickListener, QuestionFragment fragment) {
         this.context = context;
         inflater = LayoutInflater.from(context);
         this.currentQuestion = currentQuestion;
         this.clickListener = clickListener;
-        this.data = this.currentQuestion.getAnswer_array();
+        this.data = Arrays.asList(this.currentQuestion.getAnswer_array());
         this.fragment=fragment;
     }
 
@@ -52,7 +55,7 @@ public class OptionListAdapter extends RecyclerView.Adapter<OptionListAdapter.Op
     @Override
     public void onBindViewHolder(final OptionViewHolder holder, final int position) {
         holder.optionNumber.setText(String.valueOf(position + 1 + "."));
-        holder.optionText.setText(data.get(position).getAnswer_title());
+        holder.optionText.setText(Html.fromHtml(data.get(position).getAnswer_title()));
         //holder.optionImage.setImg(data.get(position).getAnswer_title());
         holder.optionCheckBox.setChecked(data.get(position).getAnswer_marked());
         holder.optionCheckBox.setTag(new Integer(position));
@@ -60,6 +63,7 @@ public class OptionListAdapter extends RecyclerView.Adapter<OptionListAdapter.Op
         holder.optionCheckBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+               //TODO put exact code here
                 if (currentQuestion.getQuestion_type().equalsIgnoreCase("multipleChoice")) {
                     clickListener.onClick(position);
                     if (holder.optionCheckBox.isChecked()) {

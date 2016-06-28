@@ -43,8 +43,8 @@ public class Utils
         }
         return json;
     }
-    public static long changeTimeIntoMilliseconds(int timeInMins){
-    return TimeUnit.MINUTES.toMillis(timeInMins) ;
+    public static long changeTimeIntoMilliseconds(int timeInSecs){
+    return TimeUnit.SECONDS.toMillis(timeInSecs) ;
     }
 
     public static void showNotification(Context context,String title,String text){

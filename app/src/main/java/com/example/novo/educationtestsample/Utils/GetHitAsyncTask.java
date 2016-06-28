@@ -47,10 +47,7 @@ public class GetHitAsyncTask extends AsyncTask<String,String,String> {
             conn.setReadTimeout(15000);
             conn.setConnectTimeout(15000);
             conn.setRequestMethod("GET");
-//            conn.setRequestProperty("Content-Type", "application/json");
             conn.setDoInput(true);
-       //     conn.setDoOutput(true);
-
             int responseCode=conn.getResponseCode();
             if (responseCode == HttpsURLConnection.HTTP_OK) {
                 String line;

@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bignerdranch.expandablerecyclerview.Model.ParentListItem;
 import com.example.novo.educationtestsample.R;
 import com.example.novo.educationtestsample.Utils.AppInfo;
 import com.example.novo.educationtestsample.Utils.ConstURL;
@@ -37,13 +38,12 @@ public class UpcomingTests extends Fragment {
 
     FragmentInteractionListener mListener;
     private RecyclerView recyclerView;
-    private TestAdapter testAdapter;
-    public static List<Test> testList = new ArrayList<>();
+    private List<Test> testList = new ArrayList<>();
     ProgressDialog progress;
-    QuestionListJSON questionListJSON;
     private static final String TAG = "UpcomingTests";
-    static int expandedItemPostion = -1;
     private RecyclerView.ViewHolder lastViewHolder=null;
+    TestAdapterWithAnimation testAdapterWithAnimation;
+    List<ParentListItem> adapterTestList;
 
     public UpcomingTests() {
         // Required empty public constructor
@@ -75,8 +75,28 @@ public class UpcomingTests extends Fragment {
                 testList = new Gson().fromJson(response, listType);
                 Log.e(TAG, "onResult: " + testList.toString());
 
-                testAdapter.setData(testList);
-                testAdapter.notifyDataSetChanged();
+                testAdapterWithAnimation = new TestAdapterWithAnimation(getActivity(), getAdapterTestList(), new ClickListener() {
+                    @Override
+                    public void onClick(int position) {
+
+                    }
+
+                    @Override
+                    public void onClick(int position, RecyclerView.ViewHolder v) {
+
+                    }
+
+                    @Override
+                    public void onLongClick(int position) {
+
+                    }
+
+                    @Override
+                    public void onNoOfAttemptedQuesChanged(int noOfAttemptedQuesChanged) {
+
+                    }
+                });
+                recyclerView.setAdapter(testAdapterWithAnimation);
             }
         });
 
@@ -102,23 +122,16 @@ public class UpcomingTests extends Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.topicList);
         recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getActivity()).color(Color.WHITE)
                 .sizeResId(R.dimen.divider).build());
-        testAdapter = new TestAdapter(getActivity(), testList, new ClickListener() {
+        adapterTestList= new ArrayList<>();
+        testAdapterWithAnimation = new TestAdapterWithAnimation(getActivity(), adapterTestList, new ClickListener() {
             @Override
             public void onClick(int position) {
 
             }
 
             @Override
-            public void onClick(int position, RecyclerView.ViewHolder viewHolder) {
-                if(lastViewHolder!=null){
-                    ((TestAdapter.TestViewHolder)lastViewHolder).testDetails.setVisibility(View.GONE);
-                    ((TestAdapter.TestViewHolder)lastViewHolder).primaryTitle.setVisibility(View.VISIBLE);
-                }
-                ((TestAdapter.TestViewHolder)viewHolder).testDetails.setVisibility(View.VISIBLE);
-                ((TestAdapter.TestViewHolder)viewHolder).primaryTitle.setVisibility(View.GONE);
-                Log.e(TAG, "Position: "+ String.valueOf(expandedItemPostion));
-                lastViewHolder=viewHolder;
-             //   mListener.replaceFragment(new TestInstructionsFragment(), "Instructions");
+            public void onClick(int position, RecyclerView.ViewHolder v) {
+
             }
 
             @Override
@@ -131,9 +144,8 @@ public class UpcomingTests extends Fragment {
 
             }
         });
-        recyclerView.setAdapter(testAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-     //   getTopicsList(view);
+        recyclerView.setAdapter(testAdapterWithAnimation);
+
         return view;
     }
 
@@ -159,5 +171,12 @@ public class UpcomingTests extends Fragment {
     public void onStart() {
         super.onStart();
         getTopicsList();
+    }
+    private List<ParentListItem> getAdapterTestList() {
+        adapterTestList= new ArrayList<>();
+        for(Test test:testList){
+            adapterTestList.add(test);
+        }
+        return adapterTestList;
     }
 }

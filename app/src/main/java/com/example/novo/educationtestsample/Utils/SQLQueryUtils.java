@@ -18,4 +18,7 @@ public class SQLQueryUtils {
             "\"teacher_id\": \"teacherId\",\"batches\":\"batchesId\",\"window_stop\": {\"operatorValue\": currentDate}}," +
             " \"fields\": {\"test_id\": true, \"primaryTitle\": true, \"duration_seconds\": true, " +
             "\"topics\":true, \"window_start\": true, \"window_stop\": true, \"total_marks\":true}, \"order\": \"date_updated DESC\"}";
+
+
+    public static final String FETCH_PARTICULAR_TEST= "{\"where\":{\"test_id\":\"testId\"}}";
 }

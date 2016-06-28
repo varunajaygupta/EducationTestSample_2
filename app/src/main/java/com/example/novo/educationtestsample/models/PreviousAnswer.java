@@ -1,17 +1,26 @@
 package com.example.novo.educationtestsample.models;
 
 /**
- * Created by Varun on 6/28/2016.
+ * Created by Varun Ajay Gupta on 5/3/16.
  */
-public class Answer
+public class PreviousAnswer
 {
     private String answer_image;
 
     private Boolean answer_marked;
 
-    private String option_number;
-
     private String answer_title;
+
+
+    public PreviousAnswer(PreviousAnswer previousAnswer) {
+       this.answer_image= previousAnswer.answer_image;
+        this.answer_marked= previousAnswer.answer_marked;
+        this.answer_title= previousAnswer.answer_title;
+    }
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 
     public String getAnswer_image ()
     {
@@ -33,16 +42,6 @@ public class Answer
         this.answer_marked = answer_marked;
     }
 
-    public String getOption_number ()
-    {
-        return option_number;
-    }
-
-    public void setOption_number (String option_number)
-    {
-        this.option_number = option_number;
-    }
-
     public String getAnswer_title ()
     {
         return answer_title;
@@ -56,6 +55,6 @@ public class Answer
     @Override
     public String toString()
     {
-        return "ClassPojo [answer_image = "+answer_image+", answer_marked = "+answer_marked+", option_number = "+option_number+", answer_title = "+answer_title+"]";
+        return "ClassPojo [answer_image = "+answer_image+", answer_marked = "+answer_marked+", answer_title = "+answer_title+"]";
     }
 }

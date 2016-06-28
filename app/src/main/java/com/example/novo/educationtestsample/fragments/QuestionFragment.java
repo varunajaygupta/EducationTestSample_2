@@ -28,14 +28,15 @@ import com.example.novo.educationtestsample.Utils.Utils;
 import com.example.novo.educationtestsample.activities.MainActivity;
 import com.example.novo.educationtestsample.adapters.OptionListAdapter;
 import com.example.novo.educationtestsample.adapters.QuestionListAdapter;
-import com.example.novo.educationtestsample.adapters.TestAdapter;
 import com.example.novo.educationtestsample.interfaces.ClickListener;
 import com.example.novo.educationtestsample.interfaces.FragmentInteractionListener;
 import com.example.novo.educationtestsample.models.Answer;
+import com.example.novo.educationtestsample.models.PreviousQuestion;
 import com.example.novo.educationtestsample.models.Question;
 import com.example.novo.educationtestsample.models.QuestionListJSON;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -92,15 +93,15 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         optionList = new ArrayList<>();
-        questionList=new ArrayList<>();
+        questionList =new ArrayList<>();
         questionListJSON=QuestionListJSON.getInstance();
-        questionList=questionListJSON.getQuestionList();
+        questionList =questionListJSON.getQuestionList();
         try {
             currentQuestion= (Question) questionList.get(questionListJSON.getCurrentQuestion()).clone();
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }
-        optionList= currentQuestion.getAnswer_array();
+        optionList= Arrays.asList(currentQuestion.getAnswer_array());
     }
 
     @Override
@@ -196,7 +197,9 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
         questionListAdapter=new QuestionListAdapter(getActivity(),new ClickListener() {
             @Override
             public void onClick(int position) {
-
+                onSave();
+                questionListJSON.setCurrentQuestion(position);
+                resetData();
             }
 
             @Override
@@ -223,7 +226,7 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
 
     private void inflateOptionList(View root) {
         optionRecyclerView =(RecyclerView)root.findViewById(R.id.optionList);
-        optionListAdapter=new OptionListAdapter(getActivity(),currentQuestion, new ClickListener() {
+        optionListAdapter=new OptionListAdapter(getActivity(), currentQuestion, new ClickListener() {
             @Override
             public void onClick(int position) {
 
@@ -297,13 +300,13 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
     }
     void resetData(){
         try {
-            currentQuestion= (Question) questionList.get(questionListJSON.getCurrentQuestion()).clone();
+            currentQuestion = (Question) questionList.get(questionListJSON.getCurrentQuestion()).clone();
             // questionImage.setImageDrawable();
             noOfQuesAttempted.setText(String.valueOf(questionListJSON.getNoOfQuesAttempted()));
-            questionText.setText(currentQuestion.getQuestion_title());
+            questionText.setText(Html.fromHtml(currentQuestion.getQuestion_title()));
             questionMarks.setText(String.valueOf(currentQuestion.getQuestion_marks()));
-            optionListAdapter.currentQuestion=currentQuestion;
-            optionListAdapter.data=currentQuestion.getAnswer_array();
+            optionListAdapter.currentQuestion = currentQuestion;
+            optionListAdapter.data= Arrays.asList(currentQuestion.getAnswer_array());
             optionListAdapter.notifyDataSetChanged();
             questionListAdapter.notifyDataSetChanged();
             questionRecyclerView.smoothScrollToPosition(questionListJSON.getCurrentQuestion());

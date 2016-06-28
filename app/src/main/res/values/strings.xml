@@ -29,7 +29,7 @@
     <string name="questiondummytext">It is easier to roll a stone up a sloping road than to lift it vertical upwards because
     </string>
     <string name="title_activity_sa">sa</string>
-    <string name="startTest">START</string>
+    <string name="startTest"> Start Test </string>
     <string name="noofattemptedquestions">Attempted Ques:</string>
     <string name="title_activity_login">Sign in</string>
 
@@ -81,6 +81,10 @@
                         },
                         \"order\": \"date_updated DESC\"</string>
 
-    <string name="marks">Total marks: </string>
-    <string name="duration">Duration: </string>
+    <string name="marks">Total marks : </string>
+    <string name="duration">Duration : </string>
+    <string name="testWindow">Test Window:</string>
+    <string name="instructions">Instructions</string>
+    <string name="testId">testId</string>
+    <string name="test">test</string>
 </resources>

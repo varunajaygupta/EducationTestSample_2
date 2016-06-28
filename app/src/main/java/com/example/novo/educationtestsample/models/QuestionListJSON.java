@@ -60,8 +60,6 @@ public class QuestionListJSON implements Cloneable {
         return super.clone();
     }
 
-
-
     public List<Question> getQuestionList() {
         return questionList;
     }
@@ -69,5 +67,4 @@ public class QuestionListJSON implements Cloneable {
     public void setQuestionList(List<Question> questionList) {
         this.questionList = questionList;
     }
-
 }

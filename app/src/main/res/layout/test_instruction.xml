@@ -23,7 +23,7 @@ android:layout_height="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/d10"
         android:textSize="@dimen/d15"
-        android:text="This Test is prepared to check your knowledge.To complete this test you don't need to have mathematical ability.\n\n -Each test have totally 15 questions\n\n -Time Period is: 45mins\n\n -Test start from easy one to hardest one.But most important questions are hard questions and it effects much more than easy questions on your score.\n\n -When you answer a question there are chances to back to your previously answered questions.\n\n  -You shouldn't use any pen/paper/internet search etc. while test.\n\n"/>
+        android:text="This Test is prepared to check your knowledge.To complete this test you don't need to have mathematical ability.\n\n -Each test have totally 15 previousQuestions\n\n -Time Period is: 45mins\n\n -Test start from easy one to hardest one.But most important previousQuestions are hard previousQuestions and it effects much more than easy previousQuestions on your score.\n\n -When you previousAnswer a question there are chances to back to your previously answered previousQuestions.\n\n  -You shouldn't use any pen/paper/internet search etc. while test.\n\n"/>
     <Button
         android:id="@+id/startTest"
         android:layout_width="wrap_content"

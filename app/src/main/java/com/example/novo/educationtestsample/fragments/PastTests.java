@@ -18,7 +18,6 @@ import com.example.novo.educationtestsample.Utils.AppInfo;
 import com.example.novo.educationtestsample.Utils.ConstURL;
 import com.example.novo.educationtestsample.Utils.GetHitAsyncTask;
 import com.example.novo.educationtestsample.Utils.SQLQueryUtils;
-import com.example.novo.educationtestsample.adapters.TestAdapter;
 import com.example.novo.educationtestsample.adapters.TestAdapterWithAnimation;
 import com.example.novo.educationtestsample.interfaces.ClickListener;
 import com.example.novo.educationtestsample.interfaces.FragmentInteractionListener;
@@ -38,20 +37,14 @@ public class PastTests extends Fragment {
 
     FragmentInteractionListener mListener;
     private RecyclerView recyclerView;
-   // private TestAdapter testAdapter;
-    public static List<Test> testList = new ArrayList<>();
+    private List<Test> testList = new ArrayList<>();
     ProgressDialog progress;
-    QuestionListJSON questionListJSON;
     private static final String TAG = "PastTests";
-    static int expandedItemPostion = -1;
     private RecyclerView.ViewHolder lastViewHolder=null;
-
-    // fields for new Adapter
     TestAdapterWithAnimation testAdapterWithAnimation;
     List<ParentListItem> adapterTestList;
 
     public PastTests() {
-        // Required empty public constructor
     }
 
 
@@ -65,9 +58,28 @@ public class PastTests extends Fragment {
         recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getActivity()).color(Color.WHITE)
                 .sizeResId(R.dimen.divider).build());
         adapterTestList= new ArrayList<>();
-        testAdapterWithAnimation = new TestAdapterWithAnimation(getActivity(), adapterTestList);
-        recyclerView.setAdapter(testAdapterWithAnimation);
+        testAdapterWithAnimation = new TestAdapterWithAnimation(getActivity(), adapterTestList, new ClickListener() {
+            @Override
+            public void onClick(int position) {
 
+            }
+
+            @Override
+            public void onClick(int position, RecyclerView.ViewHolder v) {
+
+            }
+
+            @Override
+            public void onLongClick(int position) {
+
+            }
+
+            @Override
+            public void onNoOfAttemptedQuesChanged(int noOfAttemptedQuesChanged) {
+
+            }
+        });
+        recyclerView.setAdapter(testAdapterWithAnimation);
         return view;
     }
 
@@ -108,7 +120,31 @@ public class PastTests extends Fragment {
                 }.getType();
                 testList = new Gson().fromJson(response, listType);
                 Log.e(TAG, "onResult: " + testList.toString());
-                testAdapterWithAnimation = new TestAdapterWithAnimation(getActivity(), getAdapterTestList());
+                testAdapterWithAnimation = new TestAdapterWithAnimation(getActivity(), getAdapterTestList(), new ClickListener() {
+                    @Override
+                    public void onClick(int position) {
+                    TestInstructionsFragment testInstructionsFragment= new TestInstructionsFragment();
+                    Bundle args = new Bundle();
+                    args.putSerializable(getActivity().getString(R.string.test),testList.get(position-1));
+                    testInstructionsFragment.setArguments(args);
+
+                    mListener.replaceFragment(testInstructionsFragment,getActivity().getString(R.string.instructions));
+                    }
+                    @Override
+                    public void onClick(int position, RecyclerView.ViewHolder v) {
+
+                    }
+
+                    @Override
+                    public void onLongClick(int position) {
+
+                    }
+
+                    @Override
+                    public void onNoOfAttemptedQuesChanged(int noOfAttemptedQuesChanged) {
+
+                    }
+                });
                 recyclerView.setAdapter(testAdapterWithAnimation);
              }
         });

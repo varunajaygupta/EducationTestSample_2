@@ -1,36 +1,28 @@
 package com.example.novo.educationtestsample.models;
 
+import java.util.List;
+
 /**
- * Created by Varun on 6/28/2016.
+ * Created by anubhav on 23/2/16.
  */
-public class Question implements Cloneable
+
+public class PreviousQuestion implements  Cloneable
 {
+    private String question_marks;
+
     private String question_title;
 
     private String question_image;
 
     private String question_type;
 
-    private Answer[] answer_array;
+    private List<PreviousAnswer> previousAnswer_array;
 
     private String answer_key;
-
-    private String question_marks;
 
     private int lastCheckedCheckboxPos= -1;
 
     private Boolean isAttempted= false;
-
-
-    private Boolean isMarkedForReview=Boolean.FALSE;
-
-    public Boolean getIsMarkedForReview() {
-        return isMarkedForReview;
-    }
-
-    public void setIsMarkedForReview(Boolean isMarkedForReview) {
-        this.isMarkedForReview = isMarkedForReview;
-    }
 
     public int getLastCheckedCheckboxPos() {
         return lastCheckedCheckboxPos;
@@ -44,8 +36,23 @@ public class Question implements Cloneable
         return isAttempted;
     }
 
-    public void setIsAttempted(Boolean attempted) {
-        isAttempted = attempted;
+    public void setIsAttempted(Boolean isAttempted) {
+        this.isAttempted = isAttempted;
+    }
+
+    public Boolean getIsMarkedForReview() {
+        return isMarkedForReview;
+    }
+
+    public void setIsMarkedForReview(Boolean isMarkedForReview) {
+        this.isMarkedForReview = isMarkedForReview;
+    }
+
+    private Boolean isMarkedForReview=Boolean.FALSE;
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 
     public String getQuestion_title ()
@@ -78,14 +85,14 @@ public class Question implements Cloneable
         this.question_type = question_type;
     }
 
-    public Answer[] getAnswer_array ()
+    public List<PreviousAnswer> getPreviousAnswer_array()
     {
-        return answer_array;
+        return previousAnswer_array;
     }
 
-    public void setAnswer_array (Answer[] answer_array)
+    public void setPreviousAnswer_array(List<PreviousAnswer> previousAnswer_array)
     {
-        this.answer_array = answer_array;
+        this.previousAnswer_array = previousAnswer_array;
     }
 
     public String getAnswer_key ()
@@ -111,10 +118,6 @@ public class Question implements Cloneable
     @Override
     public String toString()
     {
-        return "ClassPojo [question_title = "+question_title+", question_image = "+question_image+", question_type = "+question_type+", answer_array = "+answer_array+", answer_key = "+answer_key+", question_marks = "+question_marks+"]";
-    }
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
+        return "ClassPojo [question_title = "+question_title+", question_image = "+question_image+", question_type = "+question_type+", previousAnswer_array = "+ previousAnswer_array +", answer_key = "+answer_key+", question_marks = "+question_marks+"]";
     }
 }

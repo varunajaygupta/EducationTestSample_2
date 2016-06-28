@@ -5,5 +5,7 @@ package com.example.novo.educationtestsample.Utils;
  */
 public class ConstUtils {
     //TODO: Put all constants here
-    public static final String BARCODE_VALUE="BARCODE_VALUE";
+    public static final String TRUE="TRUE";
+    public static final String FALSE="FALSE";
+
 }
