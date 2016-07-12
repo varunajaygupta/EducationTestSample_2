@@ -87,4 +87,5 @@
     <string name="instructions">Instructions</string>
     <string name="testId">testId</string>
     <string name="test">test</string>
+    <string name="title_submit">Submit</string>
 </resources>

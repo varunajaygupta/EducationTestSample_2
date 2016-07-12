@@ -8,6 +8,7 @@ public class SQLQueryUtils {
     public static final String TEACHER_ID  = "teacherId";
     public static final String BATCH_ID  = "batchesId";
     public static final String TEST_ID="testId";
+    public static final String STUDENT_ID="studentId";
     public static final String CURRENT_DATE="currentDate";
     public static final String OPERATOR_VALUE= "operatorValue";
     public static final String GREATER_THAN  = "gt";
@@ -21,4 +22,5 @@ public class SQLQueryUtils {
 
 
     public static final String FETCH_PARTICULAR_TEST= "{\"where\":{\"test_id\":\"testId\"}}";
+    public static final String FETCH_TEST_STATUS_YET= "{\"where\":{\"test_id\":\"testId\",\"student_id\":\"studentId\"}}";
 }

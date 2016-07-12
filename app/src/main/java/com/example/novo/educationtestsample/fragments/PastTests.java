@@ -22,7 +22,6 @@ import com.example.novo.educationtestsample.adapters.TestAdapterWithAnimation;
 import com.example.novo.educationtestsample.interfaces.ClickListener;
 import com.example.novo.educationtestsample.interfaces.FragmentInteractionListener;
 import com.example.novo.educationtestsample.interfaces.ResponseCallback;
-import com.example.novo.educationtestsample.models.QuestionListJSON;
 import com.example.novo.educationtestsample.models.Test;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -112,7 +111,7 @@ public class PastTests extends Fragment {
         requestParams = requestParams.replaceAll(SQLQueryUtils.CURRENT_DATE, String.valueOf(System.currentTimeMillis()));
         requestParams = requestParams.replaceAll(SQLQueryUtils.OPERATOR_VALUE,SQLQueryUtils.LOWER_THAN );
 
-        GetHitAsyncTask getHitAsyncTask = new GetHitAsyncTask(ConstURL.FETCH_TEST_LIST, requestParams, new ResponseCallback() {
+        GetHitAsyncTask getHitAsyncTask = new GetHitAsyncTask(ConstURL.FETCH_TEST_DATA,requestParams,new ResponseCallback() {
             @Override
             public void onResult(String response) {
                 stopLoader();

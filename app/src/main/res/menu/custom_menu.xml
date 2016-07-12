@@ -14,5 +14,9 @@
             android:id="@+id/results"
             android:checked="false"
             android:title="@string/title_result" />
+        <item
+            android:id="@+id/submit"
+            android:checked="false"
+            android:title="@string/title_submit" />
     </group>
 </menu>

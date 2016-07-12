@@ -15,14 +15,34 @@ public class Question implements Cloneable
 
     private String answer_key;
 
+    private String answer_key_marked;
+
     private String question_marks;
 
     private int lastCheckedCheckboxPos= -1;
 
+    public String getAnswer_key_marked() {
+        return answer_key_marked;
+    }
+
     private Boolean isAttempted= false;
 
-
     private Boolean isMarkedForReview=Boolean.FALSE;
+
+    //TODO make it enum
+    private String answer_state;
+
+    public void setAnswer_key_marked(String answer_key_marked) {
+        this.answer_key_marked = answer_key_marked;
+    }
+
+    public String getAnswer_state() {
+        return answer_state;
+    }
+
+    public void setAnswer_state(String answer_state) {
+        this.answer_state = answer_state;
+    }
 
     public Boolean getIsMarkedForReview() {
         return isMarkedForReview;
@@ -78,7 +98,8 @@ public class Question implements Cloneable
         this.question_type = question_type;
     }
 
-    public Answer[] getAnswer_array ()
+    public Answer[]
+    getAnswer_array ()
     {
         return answer_array;
     }

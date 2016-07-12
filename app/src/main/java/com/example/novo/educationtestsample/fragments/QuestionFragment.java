@@ -14,9 +14,9 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -24,6 +24,9 @@ import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.example.novo.educationtestsample.R;
+import com.example.novo.educationtestsample.Utils.AppInfo;
+import com.example.novo.educationtestsample.Utils.ConstUtils;
+import com.example.novo.educationtestsample.Utils.FileOperationsHelper;
 import com.example.novo.educationtestsample.Utils.Utils;
 import com.example.novo.educationtestsample.activities.MainActivity;
 import com.example.novo.educationtestsample.adapters.OptionListAdapter;
@@ -31,9 +34,9 @@ import com.example.novo.educationtestsample.adapters.QuestionListAdapter;
 import com.example.novo.educationtestsample.interfaces.ClickListener;
 import com.example.novo.educationtestsample.interfaces.FragmentInteractionListener;
 import com.example.novo.educationtestsample.models.Answer;
-import com.example.novo.educationtestsample.models.PreviousQuestion;
 import com.example.novo.educationtestsample.models.Question;
 import com.example.novo.educationtestsample.models.QuestionListJSON;
+import com.example.novo.educationtestsample.models.TestStatusYet;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,11 +49,12 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
     FragmentInteractionListener mListener;
     private RecyclerView optionRecyclerView;
     private RecyclerView questionRecyclerView;
-    private  TextView tv;
+    private TextView tv;
     ViewFlipper flipper;
     ImageView questionImage;
-    TextView  questionText;
-    TextView  questionMarks;
+    TextView questionText;
+    TextView questionMarks;
+    TextView questionType;
     OptionListAdapter optionListAdapter;
     QuestionListAdapter questionListAdapter;
     List<Answer> optionList;
@@ -73,12 +77,12 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
         // Required empty public constructor
     }
 
-    public void startCountDownTimer(long time){
+    public void startCountDownTimer(long time) {
 
         new CountDownTimer(time, 1000) {
 
             public void onTick(long millisUntilFinished) {
-                countDownTimer.setText("Time left: "+String.valueOf(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))+" mins");
+                countDownTimer.setText("Time left: " + String.valueOf(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)) + " mins");
             }
 
             public void onFinish() {
@@ -93,31 +97,32 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         optionList = new ArrayList<>();
-        questionList =new ArrayList<>();
-        questionListJSON=QuestionListJSON.getInstance();
-        questionList =questionListJSON.getQuestionList();
+        questionList = new ArrayList<>();
+        questionListJSON = QuestionListJSON.getInstance();
+        questionList = questionListJSON.getQuestionList();
         try {
-            currentQuestion= (Question) questionList.get(questionListJSON.getCurrentQuestion()).clone();
+            currentQuestion = (Question) questionList.get(questionListJSON.getCurrentQuestion()).clone();
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }
-        optionList= Arrays.asList(currentQuestion.getAnswer_array());
+        optionList = Arrays.asList(currentQuestion.getAnswer_array());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View root= inflater.inflate(R.layout.fragment_question, container, false);
-        markForReview=(Button)root.findViewById(R.id.btn_mark_for_review);
-        countDownTimer=(TextView)root.findViewById(R.id.tv_timer);
+        View root = inflater.inflate(R.layout.fragment_question, container, false);
+        markForReview = (Button) root.findViewById(R.id.btn_mark_for_review);
+        countDownTimer = (TextView) root.findViewById(R.id.tv_timer);
         markForReview.setOnClickListener(this);
-        questionImage=(ImageView)root.findViewById(R.id.ivQuestion);
-        questionText=(TextView)root.findViewById(R.id.tvQuestionText);
-        questionMarks=(TextView)root.findViewById(R.id.tvQuestionMarks);
+        questionImage = (ImageView) root.findViewById(R.id.ivQuestion);
+        questionText = (TextView) root.findViewById(R.id.tvQuestionText);
+        questionMarks = (TextView) root.findViewById(R.id.tvQuestionMarks);
+        questionType = (TextView) root.findViewById(R.id.tvQuestype);
         menu = (ImageView) root.findViewById(R.id.iv_menu);
         menu.setOnClickListener(this);
-        noOfQuesAttempted=(TextView)root.findViewById(R.id.noofattemptedquestions);
+        noOfQuesAttempted = (TextView) root.findViewById(R.id.noofattemptedquestions);
         inflateQuestionData(root);
         flipper = (ViewFlipper) root.findViewById(R.id.flipper);
         animFlipInForeward = AnimationUtils.loadAnimation(getActivity(), R.anim.flipin);
@@ -132,7 +137,7 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
         countDownTimer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utils.showNotification(getActivity(),"Take Test","New math test uploaded");
+                Utils.showNotification(getActivity(), "Take Test", "New math test uploaded");
             }
         });
         return root;
@@ -187,14 +192,23 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
 
         questionText.setText(Html.fromHtml(currentQuestion.getQuestion_title()));
         questionMarks.setText(String.valueOf(currentQuestion.getQuestion_marks()));
+        questionType.setText(getQuestionType(currentQuestion.getQuestion_type()));
         noOfQuesAttempted.setText(String.valueOf(questionListJSON.getNoOfQuesAttempted()));
+    }
+
+    private String getQuestionType(String question_type) {
+        String type = ConstUtils.SINGLE_CHOICE;
+        if (question_type != null && question_type.equalsIgnoreCase("1")) {
+            type = ConstUtils.MULTIPLE_CHOICE;
+        }
+        return type;
     }
 
     private void inflateQuestionList(View root) {
         questionListLinearLayoutManager = new LinearLayoutManager(getActivity());
         questionListLinearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        questionRecyclerView =(RecyclerView)root.findViewById(R.id.rvQuestionList);
-        questionListAdapter=new QuestionListAdapter(getActivity(),new ClickListener() {
+        questionRecyclerView = (RecyclerView) root.findViewById(R.id.rvQuestionList);
+        questionListAdapter = new QuestionListAdapter(getActivity(), new ClickListener() {
             @Override
             public void onClick(int position) {
                 onSave();
@@ -225,8 +239,8 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
     }
 
     private void inflateOptionList(View root) {
-        optionRecyclerView =(RecyclerView)root.findViewById(R.id.optionList);
-        optionListAdapter=new OptionListAdapter(getActivity(), currentQuestion, new ClickListener() {
+        optionRecyclerView = (RecyclerView) root.findViewById(R.id.optionList);
+        optionListAdapter = new OptionListAdapter(getActivity(), currentQuestion, new ClickListener() {
             @Override
             public void onClick(int position) {
 
@@ -244,9 +258,9 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
 
             @Override
             public void onNoOfAttemptedQuesChanged(int noOfAttemptedQuesChanged) {
-            noOfQuesAttempted.setText(String.valueOf(noOfAttemptedQuesChanged));
+                noOfQuesAttempted.setText(String.valueOf(noOfAttemptedQuesChanged));
             }
-        },QuestionFragment.this);
+        }, QuestionFragment.this);
         optionRecyclerView.setAdapter(optionListAdapter);
         optionRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -256,7 +270,7 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
     public void onStart() {
         super.onStart();
 //        ((MainActivity)getActivity()).drawerFragment.setMenuVisibility(false);
-        ((MainActivity)getActivity()).mToolbar.setVisibility(View.GONE);
+        ((MainActivity) getActivity()).mToolbar.setVisibility(View.GONE);
     }
 
     @Override
@@ -277,9 +291,9 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
     }
 
 
-    private void SwipeRight(){
+    private void SwipeRight() {
         onSave();
-        if(questionListJSON.getCurrentQuestion()>0) {
+        if (questionListJSON.getCurrentQuestion() > 0) {
             questionListJSON.setCurrentQuestion(questionListJSON.getCurrentQuestion() - 1);
             resetData();
             flipper.setInAnimation(animFlipInBackward);
@@ -288,9 +302,9 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private void SwipeLeft(){
+    private void SwipeLeft() {
         onSave();
-        if(questionListJSON.getCurrentQuestion()+1< questionListJSON.getQuestionList().size()) {
+        if (questionListJSON.getCurrentQuestion() + 1 < questionListJSON.getQuestionList().size()) {
             questionListJSON.setCurrentQuestion(questionListJSON.getCurrentQuestion() + 1);
             resetData();
             flipper.setInAnimation(animFlipInForeward);
@@ -298,15 +312,17 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
             flipper.showNext();
         }
     }
-    void resetData(){
+
+    void resetData() {
         try {
             currentQuestion = (Question) questionList.get(questionListJSON.getCurrentQuestion()).clone();
             // questionImage.setImageDrawable();
             noOfQuesAttempted.setText(String.valueOf(questionListJSON.getNoOfQuesAttempted()));
             questionText.setText(Html.fromHtml(currentQuestion.getQuestion_title()));
             questionMarks.setText(String.valueOf(currentQuestion.getQuestion_marks()));
+            questionType.setText(getQuestionType(currentQuestion.getQuestion_type()));
             optionListAdapter.currentQuestion = currentQuestion;
-            optionListAdapter.data= Arrays.asList(currentQuestion.getAnswer_array());
+            optionListAdapter.data = Arrays.asList(currentQuestion.getAnswer_array());
             optionListAdapter.notifyDataSetChanged();
             questionListAdapter.notifyDataSetChanged();
             questionRecyclerView.smoothScrollToPosition(questionListJSON.getCurrentQuestion());
@@ -318,20 +334,20 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btn_mark_for_review:
-                if(questionListJSON.getQuestionList().get(questionListJSON.getCurrentQuestion()).getIsMarkedForReview()){
+                if (questionListJSON.getQuestionList().get(questionListJSON.getCurrentQuestion()).getIsMarkedForReview()) {
                     questionListJSON.getQuestionList().get(questionListJSON.getCurrentQuestion()).setIsMarkedForReview(false);
                     currentQuestion.setIsMarkedForReview(false);
-                    Toast.makeText(getActivity(),"UnMarked for review",Toast.LENGTH_SHORT).show();
-                }else {
-                    Toast.makeText(getActivity(),"Marked for review",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "UnMarked for review", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), "Marked for review", Toast.LENGTH_SHORT).show();
                     questionListJSON.getQuestionList().get(questionListJSON.getCurrentQuestion()).setIsMarkedForReview(true);
                     currentQuestion.setIsMarkedForReview(true);
                 }
                 break;
             case R.id.iv_menu:
-                popupMenu = new PopupMenu(getContext(),v);
+                popupMenu = new PopupMenu(getContext(), v);
                 popupMenu.getMenuInflater().inflate(R.menu.custom_menu, popupMenu.getMenu());
 
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -347,7 +363,10 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
                             case R.id.results:
                                 return true;
 
-                            default:
+                            case R.id.submit:
+                                submitTest();
+                                return true;
+                             default:
                                 break;
                         }
                         return true;
@@ -359,7 +378,8 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
         }
 
     }
-    public void onSave(){
+
+    public void onSave() {
         questionListJSON.getQuestionList().set(questionListJSON.getCurrentQuestion(), currentQuestion);
     }
 
@@ -367,7 +387,63 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
     public void onStop() {
         super.onStop();
         //((MainActivity)getActivity()).drawerFragment.setMenuVisibility(true);
-        ((MainActivity)getActivity()).mToolbar.setVisibility(View.VISIBLE);
+        ((MainActivity) getActivity()).mToolbar.setVisibility(View.VISIBLE);
+    }
+
+    public void submitTest() {
+        TestStatusYet testStatusYet = new TestStatusYet();
+        testStatusYet.setAttempted_questions(String.valueOf(QuestionListJSON.getInstance().getNoOfQuesAttempted()));
+        testStatusYet.setCurrent_question(String.valueOf(QuestionListJSON.getInstance().getCurrentQuestion()));
+        testStatusYet.setTest_id(QuestionListJSON.getInstance().getTestId());
+        testStatusYet.setRemaining_time(QuestionListJSON.getInstance().getTimeLeft());
+        testStatusYet.setStudent_id(AppInfo.getUserId(getActivity()));
+        testStatusYet.setStudent_name(AppInfo.getUserName(getActivity()));
+        testStatusYet.setStatus(QuestionListJSON.getInstance().getTestStatus());
+        List<Question> questionList = (List<Question>) QuestionListJSON.getInstance().getQuestionList();
+        convertToTestRequestData(questionList, testStatusYet);
+    }
+
+    private void convertToTestRequestData(List<Question> questionList, TestStatusYet testStatusYet) {
+        populateAnswerState(questionList);
+    }
+
+    private void populateAnswerState(List<Question> questionList) {
+        for (Question question : questionList) {
+            String answer_key_marked = "";
+            for (Answer answer : question.getAnswer_array()) {
+                if (answer.getAnswer_marked()) {
+                    answer_key_marked = answer_key_marked + ConstUtils.ANSWER_KEY_TRUE;
+                } else {
+                    answer_key_marked = answer_key_marked + ConstUtils.ANSWER_KEY_FALSE;
+                }
+            }
+            question.setAnswer_key_marked(answer_key_marked);
+            if(question.getIsMarkedForReview()){
+//              if(question.)
+            }else{
+
+            }
+        }
+    }
+
+    public Boolean writeToFile(QuestionListJSON questionListJSON){
+        FileOperationsHelper fileOperationsHelper= FileOperationsHelper.getInstance();
+        if(fileOperationsHelper.isFileExists(getActivity())){
+            fileOperationsHelper.writeFile(getActivity(),questionListJSON);
+        }else{
+            fileOperationsHelper.createFile(getActivity());
+            fileOperationsHelper.writeFile(getActivity(),questionListJSON);
+        }
+        return true;
+    }
+    public QuestionListJSON populateQuestionListJSON(){
+        FileOperationsHelper fileOperationsHelper= FileOperationsHelper.getInstance();
+        if(fileOperationsHelper.isFileExists(getActivity())){
+        QuestionListJSON questionListJSON= fileOperationsHelper.readFile(getActivity());
+        return questionListJSON;
+        }else{
+        return null;
+        }
     }
 
 }

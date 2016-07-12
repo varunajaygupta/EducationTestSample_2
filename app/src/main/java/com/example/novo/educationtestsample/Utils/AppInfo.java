@@ -3,6 +3,7 @@ package com.example.novo.educationtestsample.Utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.v4.app.FragmentActivity;
 
 /**
  * Created by Varun on 5/23/2016.
@@ -19,6 +20,9 @@ public class AppInfo {
     public static final String COACHING_ID="COACHING_ID";
     public static final String BATCH_ID="BATCH_ID";
     private static final String TEACHER_ID = "TEACHER_ID";
+    //TODO save user name remaning
+    private static final String USER_NAME = "USER_NAME";
+
 
     public static void setUserId(Context activity, String userId){
        SharedPreferences sharedPref = activity.getSharedPreferences(
@@ -100,5 +104,11 @@ public class AppInfo {
         SharedPreferences sharedPref = activity.getSharedPreferences(
                 APPLICATION_INFO, Context.MODE_PRIVATE);
         return sharedPref.getString(TEACHER_ID,DEFAULT_VALUE);
+    }
+
+    public static String getUserName(Context activity) {
+        SharedPreferences sharedPref = activity.getSharedPreferences(
+                APPLICATION_INFO, Context.MODE_PRIVATE);
+        return sharedPref.getString(USER_NAME,DEFAULT_VALUE);
     }
 }

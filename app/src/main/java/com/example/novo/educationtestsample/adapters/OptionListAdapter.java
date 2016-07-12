@@ -63,8 +63,10 @@ public class OptionListAdapter extends RecyclerView.Adapter<OptionListAdapter.Op
         holder.optionCheckBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               //TODO put exact code here
-                if (currentQuestion.getQuestion_type().equalsIgnoreCase("multipleChoice")) {
+               //1 means-multiple choice
+               //2 means-single choice
+
+                if (currentQuestion.getQuestion_type().equalsIgnoreCase("1")) {
                     clickListener.onClick(position);
                     if (holder.optionCheckBox.isChecked()) {
                         holder.optionCheckBox.setChecked(false);

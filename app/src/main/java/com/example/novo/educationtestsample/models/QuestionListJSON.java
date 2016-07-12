@@ -12,6 +12,25 @@ public class QuestionListJSON implements Cloneable {
     String testId;
     String testDuration;
     int noOfQuesAttempted=0;
+    String testStatus="";
+
+    public String getTestStatus() {
+        return testStatus;
+    }
+
+    public void setTestStatus(String testStatus) {
+        this.testStatus = testStatus;
+    }
+
+    public String getTimeLeft() {
+        return timeLeft;
+    }
+
+    public void setTimeLeft(String timeLeft) {
+        this.timeLeft = timeLeft;
+    }
+
+    String timeLeft;
 
     public int getNoOfQuesAttempted() {
         return noOfQuesAttempted;

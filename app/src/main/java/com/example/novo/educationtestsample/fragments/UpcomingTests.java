@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,12 +17,10 @@ import com.example.novo.educationtestsample.Utils.AppInfo;
 import com.example.novo.educationtestsample.Utils.ConstURL;
 import com.example.novo.educationtestsample.Utils.GetHitAsyncTask;
 import com.example.novo.educationtestsample.Utils.SQLQueryUtils;
-import com.example.novo.educationtestsample.adapters.TestAdapter;
 import com.example.novo.educationtestsample.adapters.TestAdapterWithAnimation;
 import com.example.novo.educationtestsample.interfaces.ClickListener;
 import com.example.novo.educationtestsample.interfaces.FragmentInteractionListener;
 import com.example.novo.educationtestsample.interfaces.ResponseCallback;
-import com.example.novo.educationtestsample.models.QuestionListJSON;
 import com.example.novo.educationtestsample.models.Test;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -66,7 +63,7 @@ public class UpcomingTests extends Fragment {
         requestParams = requestParams.replaceAll(SQLQueryUtils.CURRENT_DATE, String.valueOf(System.currentTimeMillis()));
         requestParams = requestParams.replaceAll(SQLQueryUtils.OPERATOR_VALUE,SQLQueryUtils.GREATER_THAN );
 
-        GetHitAsyncTask getHitAsyncTask = new GetHitAsyncTask(ConstURL.FETCH_TEST_LIST, requestParams, new ResponseCallback() {
+        GetHitAsyncTask getHitAsyncTask = new GetHitAsyncTask(ConstURL.FETCH_TEST_DATA, requestParams, new ResponseCallback() {
             @Override
             public void onResult(String response) {
                 stopLoader();
