@@ -25,21 +25,31 @@ import android.widget.ViewFlipper;
 
 import com.example.novo.educationtestsample.R;
 import com.example.novo.educationtestsample.Utils.AppInfo;
+import com.example.novo.educationtestsample.Utils.ConstURL;
 import com.example.novo.educationtestsample.Utils.ConstUtils;
 import com.example.novo.educationtestsample.Utils.FileOperationsHelper;
+import com.example.novo.educationtestsample.Utils.PostHitAsyncTask;
+import com.example.novo.educationtestsample.Utils.SQLQueryUtils;
 import com.example.novo.educationtestsample.Utils.Utils;
 import com.example.novo.educationtestsample.activities.MainActivity;
 import com.example.novo.educationtestsample.adapters.OptionListAdapter;
 import com.example.novo.educationtestsample.adapters.QuestionListAdapter;
 import com.example.novo.educationtestsample.interfaces.ClickListener;
 import com.example.novo.educationtestsample.interfaces.FragmentInteractionListener;
+import com.example.novo.educationtestsample.interfaces.ResponseCallback;
 import com.example.novo.educationtestsample.models.Answer;
+import com.example.novo.educationtestsample.models.LoginResponse;
 import com.example.novo.educationtestsample.models.Question;
 import com.example.novo.educationtestsample.models.QuestionListJSON;
+import com.example.novo.educationtestsample.models.SubmitAnswer;
+import com.example.novo.educationtestsample.models.SubmitTestData;
+import com.example.novo.educationtestsample.models.SubmitingTestResponse;
 import com.example.novo.educationtestsample.models.TestStatusYet;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -71,6 +81,7 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
     ImageView menu;
     PopupMenu popupMenu;
     TextView noOfQuesAttempted;
+    private static final String TAG = "QuestionFragment";
 
 
     public QuestionFragment() {
@@ -83,6 +94,7 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
 
             public void onTick(long millisUntilFinished) {
                 countDownTimer.setText("Time left: " + String.valueOf(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)) + " mins");
+                QuestionListJSON.getInstance().setTimeLeft(String.valueOf(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)));
             }
 
             public void onFinish() {
@@ -366,7 +378,7 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
                             case R.id.submit:
                                 submitTest();
                                 return true;
-                             default:
+                            default:
                                 break;
                         }
                         return true;
@@ -390,59 +402,123 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
         ((MainActivity) getActivity()).mToolbar.setVisibility(View.VISIBLE);
     }
 
+
+    /*
+    "test_id": "c1t40",
+    "student_id": "studentc1t1"
+
+
+    "where": {
+                        test_id: this.testId,
+                        student_id: localStorage.loginid
+                    }
+
+Normal bhejte waqt status="notsubmitted" and final submit ke time status="submitted"
+
+     */
     public void submitTest() {
+
         TestStatusYet testStatusYet = new TestStatusYet();
         testStatusYet.setAttempted_questions(String.valueOf(QuestionListJSON.getInstance().getNoOfQuesAttempted()));
         testStatusYet.setCurrent_question(String.valueOf(QuestionListJSON.getInstance().getCurrentQuestion()));
         testStatusYet.setTest_id(QuestionListJSON.getInstance().getTestId());
         testStatusYet.setRemaining_time(QuestionListJSON.getInstance().getTimeLeft());
         testStatusYet.setStudent_id(AppInfo.getUserId(getActivity()));
-        testStatusYet.setStudent_name(AppInfo.getUserName(getActivity()));
-        testStatusYet.setStatus(QuestionListJSON.getInstance().getTestStatus());
-        List<Question> questionList = (List<Question>) QuestionListJSON.getInstance().getQuestionList();
-        convertToTestRequestData(questionList, testStatusYet);
+        testStatusYet.setStudent_name(QuestionListJSON.getInstance().getStudent_name());
+        testStatusYet.setStatus(ConstUtils.TEST_STATUS_NOT_SUBMITTED);
+        List<Question> questionList = QuestionListJSON.getInstance().getQuestionList();
+        testStatusYet.setTestresponse(new ArrayList<SubmitTestData>());
+        convertToTestRequestData(questionList, testStatusYet.getTestresponse());
+        populateQuery(testStatusYet);
     }
 
-    private void convertToTestRequestData(List<Question> questionList, TestStatusYet testStatusYet) {
-        populateAnswerState(questionList);
-    }
-
-    private void populateAnswerState(List<Question> questionList) {
-        for (Question question : questionList) {
-            String answer_key_marked = "";
-            for (Answer answer : question.getAnswer_array()) {
-                if (answer.getAnswer_marked()) {
-                    answer_key_marked = answer_key_marked + ConstUtils.ANSWER_KEY_TRUE;
-                } else {
-                    answer_key_marked = answer_key_marked + ConstUtils.ANSWER_KEY_FALSE;
+    private void populateQuery(TestStatusYet testStatusYet) {
+        String requestParams = SQLQueryUtils.FETCH_TEST_STATUS_YET;
+        requestParams = requestParams.replaceAll(SQLQueryUtils.TEST_ID,testStatusYet.getTest_id());
+        requestParams = requestParams.replaceAll(SQLQueryUtils.STUDENT_ID, AppInfo.getUserId(getActivity()));
+        SubmitingTestResponse submitingTestResponse= new SubmitingTestResponse();
+        submitingTestResponse.setWhere(requestParams);
+        submitingTestResponse.setData(testStatusYet);
+        String requestString= new Gson().toJson(submitingTestResponse);
+        PostHitAsyncTask submitTestStatusAsyncTask = new PostHitAsyncTask(ConstURL.UPDATE_TEST_STATUS,requestString, new ResponseCallback() {
+            @Override
+            public void onResult(String response) {
+                if(response.equalsIgnoreCase("")){
+                    Toast.makeText(getActivity(), "Test status updated to server", Toast.LENGTH_SHORT).show();
                 }
             }
-            question.setAnswer_key_marked(answer_key_marked);
-            if(question.getIsMarkedForReview()){
-//              if(question.)
-            }else{
-
-            }
-        }
+        });
+        submitTestStatusAsyncTask.execute();
     }
 
-    public Boolean writeToFile(QuestionListJSON questionListJSON){
-        FileOperationsHelper fileOperationsHelper= FileOperationsHelper.getInstance();
-        if(fileOperationsHelper.isFileExists(getActivity())){
-            fileOperationsHelper.writeFile(getActivity(),questionListJSON);
-        }else{
+    private void convertToTestRequestData(List<Question> questionList, List<SubmitTestData> testResponse) {
+//        populateAnswerState(questionList);
+        Iterator<Question> questionIterator = questionList.iterator();
+        while (questionIterator.hasNext()) {
+            Question question = questionIterator.next();
+            SubmitTestData submitTestData = new SubmitTestData();
+            //TODO data to be populated later
+            // submitTestData.setAnswer_state(question.getAnswer_state());
+            // submitTestData.setAnswer_key(question.getAnswer_key_marked());
+            Iterator<Answer> answerIterator = Arrays.asList((question).getAnswer_array()).iterator();
+            submitTestData.setAnswer_array(new ArrayList<SubmitAnswer>());
+            String answer_key_marked = "";
+            while (answerIterator.hasNext()) {
+                Answer answer = answerIterator.next();
+                SubmitAnswer submitAnswer = new SubmitAnswer();
+                if (answer.getAnswer_marked()) {
+                    answer_key_marked = answer_key_marked + ConstUtils.ANSWER_KEY_TRUE;
+                    submitAnswer.setAnswer_marked(Boolean.TRUE);
+                } else {
+                    answer_key_marked = answer_key_marked + ConstUtils.ANSWER_KEY_FALSE;
+                    submitAnswer.setAnswer_marked(Boolean.FALSE);
+                }
+                submitTestData.getAnswer_array().add(submitAnswer);
+            }
+            testResponse.add(submitTestData);
+        }
+
+
+    }
+
+//    private void populateAnswerState(List<Question> questionList) {
+//        for (Question question : questionList) {
+//            String answer_key_marked = "";
+//            for (Answer answer : question.getAnswer_array()) {
+//                if (answer.getAnswer_marked()) {
+//                    answer_key_marked = answer_key_marked + ConstUtils.ANSWER_KEY_TRUE;
+//                } else {
+//                    answer_key_marked = answer_key_marked + ConstUtils.ANSWER_KEY_FALSE;
+//                }
+//            }
+//            question.setAnswer_key_marked(answer_key_marked);
+////            if(question.getIsMarkedForReview()){
+////
+////            }else{
+////
+////            }
+//        }
+//    }
+
+
+    public Boolean writeToFile(QuestionListJSON questionListJSON) {
+        FileOperationsHelper fileOperationsHelper = FileOperationsHelper.getInstance();
+        if (fileOperationsHelper.isFileExists(getActivity())) {
+            fileOperationsHelper.writeFile(getActivity(), questionListJSON);
+        } else {
             fileOperationsHelper.createFile(getActivity());
-            fileOperationsHelper.writeFile(getActivity(),questionListJSON);
+            fileOperationsHelper.writeFile(getActivity(), questionListJSON);
         }
         return true;
     }
-    public QuestionListJSON populateQuestionListJSON(){
-        FileOperationsHelper fileOperationsHelper= FileOperationsHelper.getInstance();
-        if(fileOperationsHelper.isFileExists(getActivity())){
-        QuestionListJSON questionListJSON= fileOperationsHelper.readFile(getActivity());
-        return questionListJSON;
-        }else{
-        return null;
+
+    public QuestionListJSON populateQuestionListJSON() {
+        FileOperationsHelper fileOperationsHelper = FileOperationsHelper.getInstance();
+        if (fileOperationsHelper.isFileExists(getActivity())) {
+            QuestionListJSON questionListJSON = fileOperationsHelper.readFile(getActivity());
+            return questionListJSON;
+        } else {
+            return null;
         }
     }
 

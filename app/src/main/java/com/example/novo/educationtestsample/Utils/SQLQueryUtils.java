@@ -15,8 +15,13 @@ public class SQLQueryUtils {
     public static final String LOWER_THAN  = "lt";
 
 
-    public static final String FETCH_TEST_LIST_QUERY = "{\"where\": {\"coaching_id\": \"coachingId\",\"status\":\"submitted\"," +
-            "\"teacher_id\": \"teacherId\",\"batches\":\"batchesId\",\"window_stop\": {\"operatorValue\": currentDate}}," +
+//    public static final String FETCH_TEST_LIST_QUERY = "{\"where\": {\"coaching_id\": \"coachingId\",\"status\":\"submitted\"," +
+//            "\"teacher_id\": \"teacherId\",\"batches\":\"batchesId\",\"window_stop\": {\"operatorValue\": currentDate}}," +
+//            " \"fields\": {\"test_id\": true, \"primaryTitle\": true, \"duration_seconds\": true, " +
+//            "\"topics\":true, \"window_start\": true, \"window_stop\": true, \"total_marks\":true}, \"order\": \"date_updated DESC\"}";
+//
+    public static final String FETCH_TEST_LIST_QUERY = "{\"where\": {\"coaching_id\": \"coachingId\",\"status\":\"submitted\"," +"" +
+        "\"batches\":\"batchesId\",\"window_stop\": {\"operatorValue\": currentDate}}," +
             " \"fields\": {\"test_id\": true, \"primaryTitle\": true, \"duration_seconds\": true, " +
             "\"topics\":true, \"window_start\": true, \"window_stop\": true, \"total_marks\":true}, \"order\": \"date_updated DESC\"}";
 

@@ -90,8 +90,8 @@ public class TestInstructionsFragment extends Fragment implements View.OnClickLi
     public void onClick(View v) {
     switch (v.getId()){
         case R.id.startTest:
+        QuestionListJSON.getInstance().setQuestionListJSONObjectToNULL();
         fetchQuestions();
-
         break;
     }
     }
@@ -113,7 +113,6 @@ public class TestInstructionsFragment extends Fragment implements View.OnClickLi
 
             }
         });
-
         getHitAsyncTask.execute();
 
     }
@@ -126,15 +125,13 @@ public class TestInstructionsFragment extends Fragment implements View.OnClickLi
             @Override
             public void onResult(String response) {
                 Log.e(TAG, response );
-                if(response!=null && !response.equalsIgnoreCase("") &&response.equalsIgnoreCase("[]") ) {
+                if(response!=null && !response.equalsIgnoreCase("") &&!response.equalsIgnoreCase("[]") ) {
                     Type listType = new TypeToken<ArrayList<TestStatusYet>>() {
                     }.getType();
                     List<TestStatusYet> testStatusYet = new Gson().fromJson(response, listType);
                     populateQuestionListJSONFromTestStatusYet(testStatusYet.get(0));
                 }
                 mListener.replaceFragment(new QuestionFragment(),"PreviousQuestion");
-
-
             }
         });
 
@@ -146,9 +143,11 @@ public class TestInstructionsFragment extends Fragment implements View.OnClickLi
     private void populateQuestionListJSONFromTestStatusYet(TestStatusYet testStatusYet) {
 
         QuestionListJSON.getInstance().setNoOfQuesAttempted(Integer.parseInt(testStatusYet.getAttempted_questions()));
-        QuestionListJSON.getInstance().setCurrentQuestion(Integer.parseInt(testStatusYet.getCurrent_question()));
+        QuestionListJSON.getInstance().setCurrentQuestion(Integer.parseInt(testStatusYet.getCurrent_question())-1);
         QuestionListJSON.getInstance().setTestId(testStatusYet.getTest_id());
         QuestionListJSON.getInstance().setTestDuration(testStatusYet.getRemaining_time());
+        QuestionListJSON.getInstance().setStudent_name(testStatusYet.getStudent_name());
+
         Iterator<Question> questionIterator= QuestionListJSON.getInstance().getQuestionList().iterator();
         Iterator<SubmitTestData> submitTestDataIterator=testStatusYet.getTestresponse().iterator();
         while (questionIterator.hasNext()&&submitTestDataIterator.hasNext()){

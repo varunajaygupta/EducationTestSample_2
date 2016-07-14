@@ -11,6 +11,8 @@ public class ConstUtils {
     public static final String MULTIPLE_CHOICE="Multiple Choice";
     public static final String ANSWER_KEY_TRUE  ="T";
     public static final String ANSWER_KEY_FALSE  ="F";
+    public static final String TEST_STATUS_NOT_SUBMITTED  ="notsubmitted";
+    public static final String TEST_STATUS_SUBMITTED  ="submitted";
 
     //Enums
     public enum AnswerStateEnum{

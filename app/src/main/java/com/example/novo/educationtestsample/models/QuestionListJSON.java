@@ -12,7 +12,17 @@ public class QuestionListJSON implements Cloneable {
     String testId;
     String testDuration;
     int noOfQuesAttempted=0;
+    String timeLeft;
+    String student_name;
     String testStatus="";
+
+    public String getStudent_name() {
+        return student_name;
+    }
+
+    public void setStudent_name(String student_name) {
+        this.student_name = student_name;
+    }
 
     public String getTestStatus() {
         return testStatus;
@@ -29,8 +39,6 @@ public class QuestionListJSON implements Cloneable {
     public void setTimeLeft(String timeLeft) {
         this.timeLeft = timeLeft;
     }
-
-    String timeLeft;
 
     public int getNoOfQuesAttempted() {
         return noOfQuesAttempted;
@@ -85,5 +93,14 @@ public class QuestionListJSON implements Cloneable {
 
     public void setQuestionList(List<Question> questionList) {
         this.questionList = questionList;
+    }
+
+    public void setQuestionListJSONObjectToNULL(){
+        setTestDuration(null);
+        setTestId(null);
+        setCurrentQuestion(0);
+        setNoOfQuesAttempted(0);
+        setTestStatus("");
+        setQuestionList(null);
     }
 }
